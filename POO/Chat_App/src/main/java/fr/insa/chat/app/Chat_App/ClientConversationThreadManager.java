@@ -8,9 +8,59 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+class SendingThreadClient extends Thread{
+	
+	PrintWriter out;
+	
+	
+	protected SendingThreadClient(PrintWriter out) {
+		this.out = out;
+	}
+	
+	public void run() {
+		String msg;
+		Scanner sc = new Scanner(System.in);
+        while(true){
+           msg = sc.nextLine();
+           out.println(msg);
+           out.flush();
+        }
+    }
+}
+
+class ReceivingThreadClient extends Thread{
+	
+	BufferedReader in;
+	PrintWriter out;
+	Socket clientsock;
+	
+	protected ReceivingThreadClient(BufferedReader in, PrintWriter out, Socket clientsock) {
+		this.in = in;
+		this.out = out;
+		this.clientsock = clientsock;
+	}
+	
+	public void run() {
+		String msg;
+        try {
+          msg = in.readLine();
+          while(msg!=null){
+             System.out.println("Server : "+msg);
+             msg = in.readLine();
+          }
+          System.out.println("Server disconnected");
+          out.close();
+          clientsock.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     }
+}
+
+
 public class ClientConversationThreadManager{
 	
-	private void StartChatSession(InetAddress dest){
+	public void StartChatSession(InetAddress dest){
 		final PrintWriter out;
 		final BufferedReader in;
 		final Socket clientsock ;
@@ -20,48 +70,12 @@ public class ClientConversationThreadManager{
             out = new PrintWriter(clientsock.getOutputStream());
             //variable to read
             in = new BufferedReader(new InputStreamReader(clientsock.getInputStream()));
-            this.StartSendingThread(out);
-    		this.StartReceivingThread(in, out, clientsock);
+            SendingThreadClient send = new SendingThreadClient(out);
+ 	       	send.start();
+ 	        ReceivingThreadClient receive = new ReceivingThreadClient(in, out, clientsock);
+ 	        receive.start();
         } catch(IOException e){
         	e.printStackTrace();
         }
-	}
-	
-	private void StartSendingThread(PrintWriter out) {
-		Thread send = new Thread(new Runnable() {
-	          String msg;
-	          Scanner sc;
-	          @Override
-	          public void run() {
-	             while(true){
-	                msg = sc.nextLine();
-	                out.println(msg);
-	                out.flush();
-	             }
-	          }
-	       });
-	       send.start();
-	}
-	
-	private void StartReceivingThread(BufferedReader in, PrintWriter out, Socket clientsock) {
-		Thread receive = new Thread(new Runnable() {
-            String msg;
-            @Override
-            public void run() {
-               try {
-                 msg = in.readLine();
-                 while(msg!=null){
-                    System.out.println("Server : "+msg);
-                    msg = in.readLine();
-                 }
-                 System.out.println("Server disconnected");
-                 out.close();
-                 clientsock.close();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-            }
-        });
-        receive.start();
 	}
 }

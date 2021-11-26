@@ -5,7 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.io.IOException;
 
 /**
@@ -31,9 +32,9 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
-    	UserModel user = new UserModel("Jean",1,true);
-    	System.out.println(user.GetPseudo());
+    public static void main(String[] args) throws UnknownHostException {
+    	ServerConversationThreadManager.AcceptConversation();
+    	ClientConversationThreadManager.StartChatSession(InetAddress.getByName("localhost"));
         launch();
     }
 
