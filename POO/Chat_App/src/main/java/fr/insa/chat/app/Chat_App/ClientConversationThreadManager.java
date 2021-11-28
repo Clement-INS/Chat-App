@@ -12,11 +12,17 @@ class SendingThreadClient extends Thread{
 	
 	PrintWriter out;
 	
-	
+	/**
+	 * SendingThreadClient constructor
+	 * @param out PrintWriter corresponding to the server the thread is chating to
+	 */
 	protected SendingThreadClient(PrintWriter out) {
 		this.out = out;
 	}
 	
+	/**
+	 * Read messages from stdin and send them to the corresponding out server.
+	 */
 	public void run() {
 		String msg;
 		Scanner sc = new Scanner(System.in);
@@ -34,12 +40,21 @@ class ReceivingThreadClient extends Thread{
 	PrintWriter out;
 	Socket clientsock;
 	
+	/**
+	 * ReceivingThreadClient Constructor
+	 * @param in BufferedReader
+	 * @param out PrintWriter corresponding to the server the thread is chating to
+	 * @param clientsock client socket
+	 */
 	protected ReceivingThreadClient(BufferedReader in, PrintWriter out, Socket clientsock) {
 		this.in = in;
 		this.out = out;
 		this.clientsock = clientsock;
 	}
 	
+	/**
+	 * Receive messages from server and close sockets when the server is disconnected
+	 */
 	public void run() {
 		String msg;
         try {
@@ -60,6 +75,10 @@ class ReceivingThreadClient extends Thread{
 
 public class ClientConversationThreadManager{
 	
+	/**
+	 * Start a chat session with a server on port 1051 with dest address, start sending and receiving threads.
+	 * @param dest IP address of the server to chat with
+	 */
 	public void StartChatSession(InetAddress dest){
 		final PrintWriter out;
 		final BufferedReader in;

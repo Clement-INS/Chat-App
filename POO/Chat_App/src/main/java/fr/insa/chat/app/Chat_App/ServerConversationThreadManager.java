@@ -12,7 +12,15 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
+
 class ThreadAcceptServer extends Thread {
+	
+	/**
+	 * Put the port 1051 in accept() state, when a connection is established,
+	 * start the sending and receiving thread which are responsible to send and receive messages
+	 * from the client who started the connection.
+	 * When both threads are started, go again in accept() state on port 1051.
+	 */
 	@Override
     public void run() {
 		int id = 0;
@@ -45,11 +53,20 @@ class SendingThreadServer extends Thread {
 	PrintWriter out;
 	int id;
 	
+	/**
+	 * SendingThreadServer constructor
+	 * @param out PrintWriter corresponding to the client the thread is chating to
+	 * @param id Id of the Thread, 0 for the first one created and then it's increasing
+	 */
 	protected SendingThreadServer(PrintWriter out, int id) {
 		this.out = out;
 		this.id = id;
 	}
 	
+	/**
+	 * Read messages from stdin and send them to the corresponding out client.
+	 * The id identifies each thread.
+	 */
 	synchronized public void run() {
 		int index_message = 0;
 		String msg;
@@ -86,15 +103,22 @@ class ReceivingThreadServer extends Thread{
 	BufferedReader in;
 	PrintWriter out;
 	Socket convsocket;
-	ServerSocket socketserver;
 	
+	/**
+	 * ReceivingThreadServer constructor
+	 * @param in BufferedReader
+	 * @param out PrintWriter corresponding to the client the thread is chating to
+	 * @param convsocket Socket corresponding to the conversation with the client
+	 */
 	protected ReceivingThreadServer(BufferedReader in, PrintWriter out, Socket convsocket, ServerSocket socketserver) {
 		this.in = in;
 		this.out = out;
 		this.convsocket = convsocket;
-		this.socketserver = socketserver;
 	}
 	
+	/**
+	 * Receive messages from client and close sockets when the client is disconnected
+	 */
 	public void run() {
 		String msg;
 		try {
@@ -107,7 +131,6 @@ class ReceivingThreadServer extends Thread{
             //close session
             out.close();
             convsocket.close();
-            socketserver.close();
          } catch (IOException e) {
               e.printStackTrace();
          }
@@ -118,6 +141,9 @@ class ReceivingThreadServer extends Thread{
 public class ServerConversationThreadManager {
 	protected static ArrayList<String> messages = new ArrayList<String>();
 	
+	/**
+	 * Start the Server thread responsible for the accept state
+	 */
 	public void AcceptConversation() {
 		ThreadAcceptServer accept = new ThreadAcceptServer();
 		accept.start();

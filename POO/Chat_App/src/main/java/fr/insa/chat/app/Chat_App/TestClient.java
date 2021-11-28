@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 
 public class TestClient {
 	public static void main(String[] args) throws UnknownHostException {
-    	//ServerConversationThreadManager.AcceptConversation();
 		ClientConversationThreadManager CCTM = new ClientConversationThreadManager();
     	CCTM.StartChatSession(InetAddress.getByName("localhost"));
     }

@@ -8,6 +8,8 @@ public class Test{
 		
 		ServerConversationThreadManager sc = new ServerConversationThreadManager();
 		sc.AcceptConversation();
-    	//ClientConversationThreadManager.StartChatSession(InetAddress.getByName("localhost"));
+		/*System.out.println("toto");
+		ClientConversationThreadManager CCTM = new ClientConversationThreadManager();
+    	CCTM.StartChatSession(InetAddress.getByName("localhost"));*/
     }
 }
