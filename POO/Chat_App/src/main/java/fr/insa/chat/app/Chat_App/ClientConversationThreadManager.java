@@ -77,7 +77,7 @@ public class ClientConversationThreadManager{
 	
 	/**
 	 * Start a chat session with a server on port 1051 with dest address, start sending and receiving threads.
-	 * @param dest IP address of the server to chat with it
+	 * @param dest IP address of the server to chat with
 	 */
 	public void StartChatSession(InetAddress dest){
 		final PrintWriter out;
