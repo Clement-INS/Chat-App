@@ -4,8 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.io.IOException;
 
@@ -18,8 +21,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("secondary"), 1640, 480);
+        scene = new Scene(loadFXML("primary"), 600, 480);
+        stage.setTitle("ChatApp");
         stage.setScene(scene);
+      
         stage.show();
     }
 
