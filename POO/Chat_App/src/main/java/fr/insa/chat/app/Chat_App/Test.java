@@ -5,11 +5,7 @@ import java.net.UnknownHostException;
 
 public class Test{
 	public static void main(String[] args) throws UnknownHostException {
-		
-		ServerConversationThreadManager sc = new ServerConversationThreadManager();
-		sc.AcceptConversation();
-		/*System.out.println("toto");
-		ClientConversationThreadManager CCTM = new ClientConversationThreadManager();
-    	CCTM.StartChatSession(InetAddress.getByName("localhost"));*/
+		UDP_Controller udp = new UDP_Controller();
+		udp.send_broadcast("Salut c'est moi!");
     }
 }
