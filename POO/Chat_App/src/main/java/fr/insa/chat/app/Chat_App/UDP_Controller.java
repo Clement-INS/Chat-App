@@ -38,7 +38,7 @@ class Receiving_thread extends Thread{
 								UDP_Controller.answer_connexion(id, user);
 							}
 							else {
-								UDP_Controller.send_broadcast("ILLEGAL_PSEUDO " + pseudo);
+								UDP_Controller.illegal_pseudo(id, user);
 							}
 						}
 						else if (state.equals("DISCONNEXION")) {
@@ -56,6 +56,7 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 2 && infos[0].equals("ILLEGAL_PSEUDO")) {
+					System.out.println(msg);
 					App.setRoot("AccueilLoginBis");
 				}
 				else {
@@ -110,6 +111,11 @@ public class UDP_Controller{
 
 	protected static void answer_connexion(InetAddress dest, UserModel user) {
 		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
+		UDP_Controller.send(msg, dest);
+	}
+	
+	protected static void illegal_pseudo(InetAddress dest, UserModel user) {
+		String msg = "ILLEGAL_PSEUDO "+ user.GetId().getHostName();
 		UDP_Controller.send(msg, dest);
 	}
 
