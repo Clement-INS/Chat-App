@@ -31,7 +31,6 @@ class Receiving_thread extends Thread{
 					String pseudo = infos[2];
 					InetAddress id = InetAddress.getByName(infos[1]);
 					if(id != user.GetId()) {
-						System.out.println(msg);
 						if (state.equals("CONNEXION")) {
 							UDP_Controller.answer_connexion(id, user);
 							if (!pseudo.equals(user.GetPseudo())) {
