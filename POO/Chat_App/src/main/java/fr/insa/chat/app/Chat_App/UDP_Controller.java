@@ -33,9 +33,9 @@ class Receiving_thread extends Thread{
 					if(id != user.GetId()) {
 						System.out.println(msg);
 						if (state.equals("CONNEXION")) {
-							if (pseudo != user.GetPseudo()) {
+							UDP_Controller.answer_connexion(id, user);
+							if (!pseudo.equals(user.GetPseudo())) {
 								user.ActifUsers.put(id, pseudo);
-								UDP_Controller.answer_connexion(id, user);
 							}
 							else {
 								UDP_Controller.illegal_pseudo(id, user);
@@ -45,7 +45,12 @@ class Receiving_thread extends Thread{
 							user.ActifUsers.remove(id);
 						}
 						else if (state.equals("CHANGE")) {
-							user.ActifUsers.put(id, pseudo);
+							if (!pseudo.equals(user.GetPseudo())) {
+								user.ActifUsers.put(id, pseudo);
+							}
+							else {
+								UDP_Controller.illegal_pseudo(id, user);
+							}
 						}
 						else if (state.equals("PSEUDO")) {
 							user.ActifUsers.put(id, pseudo);
