@@ -21,7 +21,8 @@ public class App extends Application {
 	
 	private static Stage stage;
     private static Scene scene;
-
+    protected static UserModel user;
+    
     @Override
     public void start(Stage stageIni) throws IOException {
         scene = new Scene(loadFXML("AccueilLogin"), 600, 360);

@@ -3,17 +3,17 @@ package fr.insa.chat.app.Chat_App;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.lang.IllegalArgumentException;
 
 class Receiving_thread extends Thread{
 
 	private UserModel user;
-	private UDP_Controller udp;
 
-	protected Receiving_thread(UserModel user, UDP_Controller udp) {
+	protected Receiving_thread(UserModel user) {
 		this.user = user;
-		this.udp = udp;
 	}
 
 	@Override
@@ -35,17 +35,17 @@ class Receiving_thread extends Thread{
 						if (state.equals("CONNEXION")) {
 							if (pseudo != user.GetPseudo()) {
 								user.ActifUsers.put(id, pseudo);
-								udp.answer_connexion(id);
+								UDP_Controller.answer_connexion(id, user);
 							}
 							else {
-								udp.send_broadcast("ILLEAGL_PSEUDO " + pseudo);
+								UDP_Controller.send_broadcast("ILLEGAL_PSEUDO " + pseudo);
 							}
 						}
 						else if (state.equals("DISCONNEXION")) {
 							user.ActifUsers.remove(id);
 						}
 						else if (state.equals("CHANGE")) {
-							user.ActifUsers.replace(id, pseudo);
+							user.ActifUsers.put(id, pseudo);
 						}
 						else if (state.equals("PSEUDO")) {
 							user.ActifUsers.put(id, pseudo);
@@ -55,8 +55,8 @@ class Receiving_thread extends Thread{
 						}
 					}
 				}
-				else if (infos.length == 2 && infos[0].equals("ILLEAGL_PSEUDO")) {
-					user.ActifUsers.remove(InetAddress.getByName(infos[1]));
+				else if (infos.length == 2 && infos[0].equals("ILLEGAL_PSEUDO")) {
+					App.setRoot("AccueilLoginBis");
 				}
 				else {
 					throw new IllegalArgumentException("Wrong UDP size message !!!");
@@ -70,31 +70,30 @@ class Receiving_thread extends Thread{
 
 public class UDP_Controller{
 
-	private UserModel user;
-
-	public UDP_Controller(UserModel user) {
-		this.user = user;
-		Receiving_thread rt = new Receiving_thread(user, this);
-		rt.start();
-		this.connexion();
-	}
-
-	protected void send_broadcast(String msg) {
+	protected static void send_broadcast(String msg) {
 		try {
 			byte[] packet = msg.getBytes();
 			DatagramSocket socket = new DatagramSocket();
 			socket.setBroadcast(true);
-			DatagramPacket sendPacket;
-			sendPacket = new DatagramPacket(packet, packet.length, InetAddress.getByName("255.255.255.255"), 1031);
-			socket.send(sendPacket);
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while (interfaces.hasMoreElements()) {
+				NetworkInterface inter = interfaces.nextElement();
+				if (!inter.isLoopback()) {
+					for (InterfaceAddress interAdd : inter.getInterfaceAddresses()) {
+						InetAddress broadcast = interAdd.getBroadcast();
+						DatagramPacket sendPacket;
+						sendPacket = new DatagramPacket(packet, packet.length, broadcast, 1031);
+						socket.send(sendPacket);
+					}
+				}
+			}
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	protected void answer_connexion(InetAddress dest) {
-		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
+	private static void send(String msg, InetAddress dest) {
 		byte[] packet = msg.getBytes();
 		try {
 			DatagramSocket socket = new DatagramSocket();
@@ -106,19 +105,26 @@ public class UDP_Controller{
 			e.printStackTrace();
 		}
 	}
+	
+	protected static void answer_connexion(InetAddress dest, UserModel user) {
+		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
+		UDP_Controller.send(msg, dest);
+	}
 
-	protected void connexion() {
+	protected static void connexion(UserModel user) {
+		Receiving_thread rt = new Receiving_thread(user);
+		rt.start();
 		String msg = "CONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
-		send_broadcast(msg);
+		UDP_Controller.send_broadcast(msg);
 	}
 
-	protected void disconnexion() {
+	protected static void disconnexion(UserModel user) {
 		String msg = "DISCONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
-		send_broadcast(msg);
+		UDP_Controller.send_broadcast(msg);
 	}
 
-	protected void change() {
+	protected static void change(UserModel user) {
 		String msg = "CHANGE " + user.GetId().getHostName() + " " + user.GetPseudo();
-		send_broadcast(msg);
+		UDP_Controller.send_broadcast(msg);
 	}
 }

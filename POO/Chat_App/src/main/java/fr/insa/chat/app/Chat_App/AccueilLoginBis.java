@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class AccueilLoginController {
+public class AccueilLoginBis {
 
 	
 	@FXML private TextField pseudoField;
@@ -16,8 +16,7 @@ public class AccueilLoginController {
 			String pseudo = pseudoField.getText();
 			App.reSize(575, 530);
 	        App.setRoot("MenuPrincipal");
-	        App.user = new UserModel(pseudo);
-			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
+	        App.user.SetPseudo(pseudo);
 		}
 	}
 }

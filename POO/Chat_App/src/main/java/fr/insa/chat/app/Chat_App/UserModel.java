@@ -11,6 +11,7 @@ public class UserModel {
 	
 	private InetAddress Id;
 	
+	
 	protected HashMap<InetAddress, String> ActifUsers;
 	
 	public UserModel(String Pseudo) {
@@ -21,6 +22,12 @@ public class UserModel {
 			e.printStackTrace();
 		}
 		this.ActifUsers = new HashMap<InetAddress, String>();
+		UDP_Controller.connexion(this);
+	}
+	
+	public void SetPseudo(String Pseudo) {
+		this.Pseudo = Pseudo;
+		UDP_Controller.change(this);
 	}
 	
 	public String GetPseudo() {
