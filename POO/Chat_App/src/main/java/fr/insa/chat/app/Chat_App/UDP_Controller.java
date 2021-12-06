@@ -3,6 +3,7 @@ package fr.insa.chat.app.Chat_App;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.lang.IllegalArgumentException;
 
 class Receiving_thread extends Thread{
@@ -31,26 +32,30 @@ class Receiving_thread extends Thread{
 					InetAddress id = InetAddress.getByName(infos[1]);
 					if(id != user.GetId()) {
 						System.out.println(msg);
-						if (state == "CONNEXION") {
+						if (state.equals("CONNEXION")) {
 							if (pseudo != user.GetPseudo()) {
 								user.ActifUsers.put(id, pseudo);
+								udp.answer_connexion(id);
 							}
 							else {
 								udp.send_broadcast("ILLEAGL_PSEUDO " + pseudo);
 							}
 						}
-						else if (state == "DISCONNEXION") {
+						else if (state.equals("DISCONNEXION")) {
 							user.ActifUsers.remove(id);
 						}
-						else if (state == "CHANGE") {
+						else if (state.equals("CHANGE")) {
 							user.ActifUsers.replace(id, pseudo);
+						}
+						else if (state.equals("PSEUDO")) {
+							user.ActifUsers.put(id, pseudo);
 						}
 						else {
 							throw new IllegalArgumentException("Wrong first word in UDP message !!!");
 						}
 					}
 				}
-				else if (infos.length == 2 && infos[0] == "ILLEAGL_PSEUDO") {
+				else if (infos.length == 2 && infos[0].equals("ILLEAGL_PSEUDO")) {
 					user.ActifUsers.remove(InetAddress.getByName(infos[1]));
 				}
 				else {
@@ -81,6 +86,20 @@ public class UDP_Controller{
 			socket.setBroadcast(true);
 			DatagramPacket sendPacket;
 			sendPacket = new DatagramPacket(packet, packet.length, InetAddress.getByName("255.255.255.255"), 1031);
+			socket.send(sendPacket);
+			socket.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	protected void answer_connexion(InetAddress dest) {
+		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
+		byte[] packet = msg.getBytes();
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			DatagramPacket sendPacket;
+			sendPacket = new DatagramPacket(packet, packet.length, dest, 1031);
 			socket.send(sendPacket);
 			socket.close();
 		} catch (Exception e) {
