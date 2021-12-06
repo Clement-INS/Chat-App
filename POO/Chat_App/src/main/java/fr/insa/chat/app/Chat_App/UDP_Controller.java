@@ -81,9 +81,11 @@ public class UDP_Controller{
 				if (!inter.isLoopback()) {
 					for (InterfaceAddress interAdd : inter.getInterfaceAddresses()) {
 						InetAddress broadcast = interAdd.getBroadcast();
-						DatagramPacket sendPacket;
-						sendPacket = new DatagramPacket(packet, packet.length, broadcast, 1031);
-						socket.send(sendPacket);
+						if (broadcast != null) {
+							DatagramPacket sendPacket;
+							sendPacket = new DatagramPacket(packet, packet.length, broadcast, 1031);
+							socket.send(sendPacket);
+						}
 					}
 				}
 			}
@@ -92,7 +94,7 @@ public class UDP_Controller{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void send(String msg, InetAddress dest) {
 		byte[] packet = msg.getBytes();
 		try {
@@ -105,7 +107,7 @@ public class UDP_Controller{
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected static void answer_connexion(InetAddress dest, UserModel user) {
 		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send(msg, dest);
