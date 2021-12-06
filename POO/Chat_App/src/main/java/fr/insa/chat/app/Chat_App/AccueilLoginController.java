@@ -14,8 +14,8 @@ public class AccueilLoginController {
 	public void connect(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER) {
 			String pseudo = pseudoField.getText();
-			App.reSize(336, 582);
-	        App.setRoot("ChatWindow");
+			App.reSize(575, 530);
+	        App.setRoot("MenuPrincipal");
 		}
 	}
 }
