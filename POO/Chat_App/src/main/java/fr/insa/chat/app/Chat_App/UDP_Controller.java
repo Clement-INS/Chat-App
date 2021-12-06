@@ -60,7 +60,6 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 2 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					System.out.println(msg);
 					App.setRoot("AccueilLoginBis");
 				}
 				else {
