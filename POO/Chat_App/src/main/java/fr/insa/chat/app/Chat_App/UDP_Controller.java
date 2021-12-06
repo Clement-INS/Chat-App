@@ -16,6 +16,9 @@ class Receiving_thread extends Thread{
 		this.user = user;
 	}
 
+	/**
+	 * Receive udp messages and acts according to the message
+	 */
 	@Override
 	public void run() {
 		try {
@@ -37,7 +40,7 @@ class Receiving_thread extends Thread{
 								user.ActifUsers.put(id, pseudo);
 							}
 							else {
-								UDP_Controller.illegal_pseudo(id, user);
+								UDP_Controller.illegal_pseudo(id);
 							}
 						}
 						else if (state.equals("DISCONNEXION")) {
@@ -48,7 +51,7 @@ class Receiving_thread extends Thread{
 								user.ActifUsers.put(id, pseudo);
 							}
 							else {
-								UDP_Controller.illegal_pseudo(id, user);
+								UDP_Controller.illegal_pseudo(id);
 							}
 						}
 						else if (state.equals("PSEUDO")) {
@@ -59,8 +62,7 @@ class Receiving_thread extends Thread{
 						}
 					}
 				}
-				else if (infos.length == 2 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					System.out.println(msg);
+				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
 					App.setRoot("AccueilLoginBis");
 				}
 				else {
@@ -75,6 +77,10 @@ class Receiving_thread extends Thread{
 
 public class UDP_Controller{
 
+	/**
+	 * Send a msg in broadcast to everyone on the LAN
+	 * @param msg
+	 */
 	protected static void send_broadcast(String msg) {
 		try {
 			byte[] packet = msg.getBytes();
@@ -100,6 +106,11 @@ public class UDP_Controller{
 		}
 	}
 
+	/**
+	 * Send a msg to dest with udp protocol
+	 * @param msg
+	 * @param dest
+	 */
 	private static void send(String msg, InetAddress dest) {
 		byte[] packet = msg.getBytes();
 		try {
@@ -113,28 +124,49 @@ public class UDP_Controller{
 		}
 	}
 
+	/**
+	 * Send to dest the informations of user so he can know user is connected
+	 * @param dest
+	 * @param user
+	 */
 	protected static void answer_connexion(InetAddress dest, UserModel user) {
 		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send(msg, dest);
 	}
 	
-	protected static void illegal_pseudo(InetAddress dest, UserModel user) {
-		String msg = "ILLEGAL_PSEUDO "+ user.GetId().getHostName();
+	/**
+	 * Tell dest that he has to change his pseudo
+	 * @param dest
+	 */
+	protected static void illegal_pseudo(InetAddress dest) {
+		String msg = "ILLEGAL_PSEUDO";
 		UDP_Controller.send(msg, dest);
 	}
 
+	/**
+	 * Send a broadcast to everyone to tell them user just connected with a pseudo and ask if it is valid
+	 * @param user
+	 */
 	protected static void connexion(UserModel user) {
 		Receiving_thread rt = new Receiving_thread(user);
 		rt.start();
 		String msg = "CONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}
-
+	
+	/**
+	 * Tell everyone the user disconnected
+	 * @param user
+	 */
 	protected static void disconnexion(UserModel user) {
 		String msg = "DISCONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}
 
+	/**
+	 * Tell everyone the user is changing pseudo and ask if it is valid
+	 * @param user
+	 */
 	protected static void change(UserModel user) {
 		String msg = "CHANGE " + user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);

@@ -14,10 +14,11 @@ public class AccueilLoginController {
 	public void connect(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER) {
 			String pseudo = pseudoField.getText();
+			App.user = new UserModel(pseudo);
+			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
 			App.reSize(575, 530);
 	        App.setRoot("MenuPrincipal");
-	        App.user = new UserModel(pseudo);
-			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
+	        
 		}
 	}
 }
