@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.MainController">
    <children>
       <AnchorPane prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: Black;">
          <children>
@@ -30,7 +29,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="40.0" prefWidth="156.0">
                      <children>
-                        <Label layoutX="14.0" layoutY="8.0" text="Pseudo" textFill="#f838d8">
+                        <Label fx:id="pseudoActuel" layoutX="14.0" layoutY="8.0" text="Pseudo" textFill="#f838d8">
                            <font>
                               <Font name="Ubuntu Mono" size="22.0" />
                            </font>
@@ -39,7 +38,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="40.0" prefWidth="696.0">
                      <children>
-                        <Button layoutX="555.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: lightgray;" text="Change Pseudo" />
+                        <Button fx:id="changePseudoButton" layoutX="555.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#changePseudo" style="-fx-background-color: lightgray;" text="Change Pseudo" />
                      </children>
                   </AnchorPane>
                </children>
@@ -65,7 +64,7 @@
                                           </Label>
                                        </children>
                                     </AnchorPane>
-                                    <ListView prefHeight="172.0" prefWidth="260.0" />
+                                    <ListView fx:id="inDiscussionWith" prefHeight="172.0" prefWidth="260.0" />
                                  </children>
                               </VBox>
                            </children>
@@ -85,15 +84,7 @@
                         </AnchorPane>
                         <ScrollPane prefHeight="440.0" prefWidth="260.0">
                            <content>
-                              <VBox fx:id="ActiveUserList" prefHeight="438.0" prefWidth="258.0">
-                                 <children>
-                                    <AnchorPane prefHeight="30.0" prefWidth="258.0">
-                                       <children>
-                                          <Label prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: White; -fx-border-color: Gray;" text="NomUser" />
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </VBox>
+                              <VBox fx:id="connectedUserList" prefHeight="438.0" prefWidth="258.0" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -109,60 +100,13 @@
                               <Insets />
                            </VBox.margin>
                            <content>
-                              <VBox prefHeight="630.0" prefWidth="656.0">
-                                 <children>
-                                    <AnchorPane prefWidth="636.0" style="-fx-padding: 10;">
-                                       <children>
-                                          <VBox prefWidth="616.0" style="-fx-padding: 10;">
-                                             <children>
-                                                <AnchorPane>
-                                                   <children>
-                                                      <Label style="-fx-background-color: gray; -fx-text-fill: white;" text="Bonsweg">
-                                                         <padding>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </padding>
-                                                      </Label>
-                                                   </children>
-                                                </AnchorPane>
-                                                <AnchorPane>
-                                                   <children>
-                                                      <Label text="Date" />
-                                                   </children>
-                                                </AnchorPane>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane style="-fx-padding: 10;">
-                                       <children>
-                                          <VBox prefWidth="616.0" style="-fx-padding: 10;">
-                                             <children>
-                                                <AnchorPane>
-                                                   <children>
-                                                      <Label style="-fx-background-color: #3369ff; -fx-text-fill: white;" text="Bonsweg" AnchorPane.rightAnchor="10.0">
-                                                         <padding>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </padding>
-                                                      </Label>
-                                                   </children>
-                                                </AnchorPane>
-                                             </children>
-                                          </VBox>
-                                          <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                             <children>
-                                                <Label layoutX="46.0" layoutY="117.0" text="Label" />
-                                             </children>
-                                          </AnchorPane>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </VBox>
+                              <VBox fx:id="messageList" prefHeight="630.0" prefWidth="656.0" />
                            </content>
                         </ScrollPane>
                         <AnchorPane prefHeight="80.0" prefWidth="660.0">
                            <children>
-                              <TextField layoutX="20.0" layoutY="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
-                              <Button fx:id="boutonSend" layoutX="590.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #3369ff;" text="Send" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="570.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                              <TextField fx:id="textMsgField" layoutX="20.0" layoutY="10.0" onKeyReleased="#sendMessage" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
+                              <Button fx:id="sendMsgButton" layoutX="590.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#sendMessage" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #3369ff;" text="Send" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="570.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                                  <font>
                                     <Font name="Ubuntu Mono" size="20.0" />
                                  </font>
