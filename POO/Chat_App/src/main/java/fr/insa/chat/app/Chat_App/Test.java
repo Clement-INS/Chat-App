@@ -8,5 +8,13 @@ public class Test{
 	public static void main(String[] args) {
 		UserModel u1 = new UserModel("Jack");
 		DTBController d = new DTBController(u1);
+		try {
+			d.add_user(InetAddress.getLocalHost());
+			d.add_message(InetAddress.getLocalHost(), "Salut");
+			d.print_tables();
+			d.remove_DB();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 }
