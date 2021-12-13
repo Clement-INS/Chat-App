@@ -39,7 +39,7 @@ public class MainController {
 
 	@FXML
     protected void initialize() throws IOException {
-        pseudoActuel.setText(App.pseudo);;
+        pseudoActuel.setText(App.user.GetPseudo());;
         addConnected("Michel");
         addConnected("Bernard");
         addConnected("Tirie");
