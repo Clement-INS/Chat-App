@@ -1,13 +1,16 @@
 package fr.insa.chat.app.Chat_App;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -30,7 +33,8 @@ public class MainController {
 	@FXML private TextField textMsgField;
 
 	@FXML private VBox connectedUserList;
-
+	private int count;
+	private HashMap<Integer, String> UserListCorrespondance;
 	@FXML private ListView<String> inDiscussionWith;
 
 	Alert alert = new Alert(AlertType.ERROR,
@@ -38,18 +42,21 @@ public class MainController {
 			ButtonType.OK);
 
 	@FXML
-    protected void initialize() throws IOException {
-        pseudoActuel.setText(App.user.GetPseudo());;
-        addConnected("Michel");
-        addConnected("Bernard");
-        addConnected("Tirie");
-        
-        ArrayList<Message> list = new ArrayList<Message>();
-        list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
-        list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-        loadMessages(list);
-    }
-	
+	protected void initialize() throws IOException {
+		this.UserListCorrespondance = new HashMap();
+		this.count = 0;
+		
+		pseudoActuel.setText(App.user.GetPseudo());;
+		addConnected("Michel");
+		addConnected("Bernard");
+		addConnected("Tirie");
+
+		ArrayList<Message> list = new ArrayList<Message>();
+		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
+		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
+		loadMessages(list);
+	}
+
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLogin");
@@ -81,7 +88,7 @@ public class MainController {
 		addMessage(date, content, "messageSent.fxml");
 	}
 
-		public void resetMessage(){
+	public void resetMessage(){
 		messageList.getChildren().clear();
 	}
 
@@ -124,7 +131,7 @@ public class MainController {
 		}
 
 	}
-	
+
 	@FXML
 	public void addConnected(String content) throws IOException{
 		FXMLLoader loader = new FXMLLoader();   
@@ -135,7 +142,19 @@ public class MainController {
 
 		messageLabel.setText(content);
 		connectedUserList.getChildren().add(pane);
+		
 	}
+
+	@FXML
+	public void removeConnected(String pseudo){
+		AnchorPane pane;
+		for (Node n : connectedUserList.getChildren()) {
+			pane = (AnchorPane) n;
+			if (pane.getChildren().get(0).getAccessibleText())
+		}
+
+	}
+
 
 	private void startChatWith(AnchorPane pane){
 		Label messageLabel = (Label) pane.getChildren().get(0);

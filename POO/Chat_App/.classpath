@@ -24,7 +24,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="Databases/sqlite-jdbc-3.36.0.3.jar">
+	<classpathentry kind="lib" path="/home/alaverdo/Bureau/4A/Chat-App/POO/Chat_App/Databases/sqlite-jdbc-3.36.0.3.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
