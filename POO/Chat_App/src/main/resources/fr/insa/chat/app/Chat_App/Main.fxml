@@ -64,7 +64,7 @@
                                           </Label>
                                        </children>
                                     </AnchorPane>
-                                    <ListView fx:id="inDiscussionWith" prefHeight="172.0" prefWidth="260.0" />
+                                    <ListView fx:id="inDiscussionWith" onKeyReleased="#removeCurrentDiscussion" onMouseClicked="#updateCurrentDiscussion" prefHeight="172.0" prefWidth="260.0" />
                                  </children>
                               </VBox>
                            </children>

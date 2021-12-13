@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -33,7 +34,7 @@ public class MainController {
 	@FXML private ListView<String> inDiscussionWith;
 
 	Alert alert = new Alert(AlertType.ERROR,
-			"Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.", 
+			"tu parles dans le vide gros malin", 
 			ButtonType.OK);
 
 	@FXML
@@ -95,11 +96,7 @@ public class MainController {
 	private void sendMessage(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER){
 			String messageText = textMsgField.getText();
-
 			if (!messageText.isEmpty()){
-
-				// On vérifie qu'on discute bien avec quelqu'un
-				// Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 				if(App.currentDiscussionIndex >= 0){
 					String date = currentDate();
 					addMessageTo(date,messageText);
@@ -112,7 +109,6 @@ public class MainController {
 		}
 	}
 
-	// Utilisé quand on change de fenetre ou quand on prend l'historique
 	private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
@@ -161,7 +157,6 @@ public class MainController {
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
 			String name = getPseudoFromIndex(App.currentDiscussionIndex);
 			resetMessage();
-			System.out.println(name);
 		} 
 	}
 
