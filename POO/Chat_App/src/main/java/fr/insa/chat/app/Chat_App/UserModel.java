@@ -1,26 +1,40 @@
 package fr.insa.chat.app.Chat_App;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.lang.String;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class UserModel {
 	
 	private String Pseudo;
 	
-	private int Id;
+	private InetAddress Id;
 	
-	private boolean isConnected;
 	
-	private ArrayList<UserModel> ActifUsers;
+	protected HashMap<InetAddress, String> ActifUsers;
 	
-	public UserModel(String Pseudo, int Id, boolean isConnected) {
+	public UserModel(String Pseudo) {
 		this.Pseudo = Pseudo;
-		this.Id = Id;
-		this.isConnected = isConnected;
-		this.ActifUsers = new ArrayList<UserModel> ();
+		try {
+			this.Id = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		this.ActifUsers = new HashMap<InetAddress, String>();
+		UDP_Controller.connexion(this);
+	}
+	
+	public void SetPseudo(String Pseudo) {
+		this.Pseudo = Pseudo;
+		UDP_Controller.change(this);
 	}
 	
 	public String GetPseudo() {
 		return this.Pseudo;
+	}
+	
+	public InetAddress GetId() {
+		return Id;
 	}
 }
