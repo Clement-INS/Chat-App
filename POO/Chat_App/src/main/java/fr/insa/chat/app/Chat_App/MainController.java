@@ -33,8 +33,7 @@ public class MainController {
 	@FXML private TextField textMsgField;
 
 	@FXML private VBox connectedUserList;
-	private int count;
-	private HashMap<Integer, String> UserListCorrespondance;
+	
 	@FXML private ListView<String> inDiscussionWith;
 
 	Alert alert = new Alert(AlertType.ERROR,
@@ -43,8 +42,6 @@ public class MainController {
 
 	@FXML
 	protected void initialize() throws IOException {
-		this.UserListCorrespondance = new HashMap();
-		this.count = 0;
 		
 		pseudoActuel.setText(App.user.GetPseudo());;
 		addConnected("Michel");
@@ -148,11 +145,16 @@ public class MainController {
 	@FXML
 	public void removeConnected(String pseudo){
 		AnchorPane pane;
+		int i = 0;
 		for (Node n : connectedUserList.getChildren()) {
 			pane = (AnchorPane) n;
-			if (pane.getChildren().get(0).getAccessibleText())
+			Label name = (Label)pane.getChildren().get(0);
+			if (name.getText().equals(pseudo)) {
+				connectedUserList.getChildren().remove(i);
+				break;
+			}
+			i++;
 		}
-
 	}
 
 
