@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Test{
 	public static void main(String[] args) {
+		System.out.println("yo");
 		UserModel u1 = new UserModel("Jack");
 		DTBController d = new DTBController(u1);
 		try {
