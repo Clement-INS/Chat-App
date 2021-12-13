@@ -28,7 +28,6 @@ public class App extends Application {
         stageIni.setTitle("ChatApp");
         stageIni.setScene(scene);
         stageIni.show();
-        System.out.println("a virer");
     }
 
     static void setRoot(String fxml) throws IOException {
