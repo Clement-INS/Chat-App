@@ -17,9 +17,8 @@ public class App extends Application {
 	
 	private static Stage stage;
     private static Scene scene;
-    
-    public static String pseudo;
     public static int currentDiscussionIndex = -1;
+    protected static UserModel user;
 
     @Override
     public void start(Stage stageIni) throws IOException {
@@ -40,6 +39,11 @@ public class App extends Application {
     	stage.centerOnScreen();
     }
 
+    private void closeProgram() {
+    	UDP_Controller.disconnexion(App.user);
+    	stage.close();
+    }
+    
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
