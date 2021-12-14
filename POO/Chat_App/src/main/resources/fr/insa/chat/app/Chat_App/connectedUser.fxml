@@ -5,7 +5,7 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="10.0" prefWidth="235.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.ConnectedUserController">
+<AnchorPane prefWidth="143.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.ConnectedUserController">
    <children>
       <Label style="-fx-background-color: white; -fx-border-color: gray;" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <effect>

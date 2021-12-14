@@ -7,15 +7,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="600.0" style="-fx-background-color: LightBlue;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.AccueilLoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: LightBlue;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.AccueilLoginController">
    <children>
-      <Label layoutX="198.0" layoutY="257.0" text="Enter your pseudo" textFill="#f838d8">
+      <Label layoutX="198.0" layoutY="257.0" text="Enter your pseudo" textFill="#f838d8" AnchorPane.leftAnchor="351.0" AnchorPane.topAnchor="500.0">
          <font>
-            <Font name="Ubuntu Mono" size="24.0" />
+            <Font name="Ubuntu Mono" size="35.0" />
          </font>
       </Label>
-      <TextField fx:id="pseudoField" layoutX="217.0" layoutY="288.0" onKeyReleased="#connect" />
-      <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="37.0">
+      <TextField fx:id="pseudoField" layoutX="119.0" layoutY="288.0" onKeyReleased="#connect" prefHeight="40.0" prefWidth="280.0" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="550.0" />
+      <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="322.0" layoutY="94.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="100.0">
          <image>
             <Image url="@icone.png" />
          </image>
