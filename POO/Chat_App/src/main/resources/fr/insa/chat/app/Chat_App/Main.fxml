@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.MainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.chat.app.Chat_App.MainController">
    <children>
       <AnchorPane prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: Black;">
          <children>
@@ -143,9 +143,9 @@
                         <AnchorPane>
                            <children>
                               <TextField fx:id="textMsgField" onKeyReleased="#sendMessage" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
-                              <Button fx:id="sendMsgButton" layoutX="590.0" layoutY="24.0" maxHeight="35.0" maxWidth="70.0" minHeight="35.0" minWidth="65.0" mnemonicParsing="false" onMouseClicked="#sendMessage" style="-fx-background-color: #3369ff;" text="Send" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                              <Button fx:id="sendMsgButton" layoutX="590.0" layoutY="24.0" maxHeight="35.0" maxWidth="70.0" minHeight="35.0" minWidth="65.0" mnemonicParsing="false" onMouseClicked="#sendMessageButton" style="-fx-background-color: #3369ff;" text="Send" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                                  <font>
-                                    <Font name="Ubuntu Mono" size="20.0" />
+                                    <Font size="17.0" />
                                  </font>
                               </Button>
                            </children>

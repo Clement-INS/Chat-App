@@ -38,18 +38,18 @@ public class MainController {
 			ButtonType.OK);
 
 	@FXML
-    protected void initialize() throws IOException {
-        pseudoActuel.setText(App.user.GetPseudo());;
-        addConnected("Michel");
-        addConnected("Bernard");
-        addConnected("Tirie");
-        
-        ArrayList<Message> list = new ArrayList<Message>();
-        list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
-        list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-        loadMessages(list);
-    }
-	
+	protected void initialize() throws IOException {
+		pseudoActuel.setText(App.user.GetPseudo());;
+		addConnected("Michel");
+		addConnected("Bernard");
+		addConnected("Tirie");
+
+		ArrayList<Message> list = new ArrayList<Message>();
+		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
+		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
+		loadMessages(list);
+	}
+
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLogin");
@@ -81,7 +81,7 @@ public class MainController {
 		addMessage(date, content, "messageSent.fxml");
 	}
 
-		public void resetMessage(){
+	public void resetMessage(){
 		messageList.getChildren().clear();
 	}
 
@@ -109,6 +109,21 @@ public class MainController {
 		}
 	}
 
+	@FXML
+	private void sendMessageButton() throws IOException {
+		String messageText = textMsgField.getText();
+		if (!messageText.isEmpty()){
+			if(App.currentDiscussionIndex >= 0){
+				String date = currentDate();
+				addMessageTo(date,messageText);
+				textMsgField.clear();
+			}
+			else{
+				alert.show();
+			}
+		}  
+	}
+
 	private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
@@ -124,7 +139,7 @@ public class MainController {
 		}
 
 	}
-	
+
 	@FXML
 	public void addConnected(String content) throws IOException{
 		FXMLLoader loader = new FXMLLoader();   
@@ -144,7 +159,6 @@ public class MainController {
 
 		String user = messageLabel.getText();
 		inDiscussionWith.getItems().add(user);
-
 	}
 
 	private String getPseudoFromIndex(int index){
