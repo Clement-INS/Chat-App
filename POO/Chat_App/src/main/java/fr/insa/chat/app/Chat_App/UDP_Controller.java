@@ -52,10 +52,14 @@ class Receiving_thread extends Thread{
 							}
 							else if (state.equals("DISCONNEXION")) {
 								user.ActifUsers.remove(id);
+								controller.removeConnected(pseudo);
 							}
 							else if (state.equals("CHANGE")) {
 								if (!pseudo.equals(user.GetPseudo())) {
+									String old_pseudo = user.ActifUsers.get(id);
 									user.ActifUsers.put(id, pseudo);
+									controller.removeConnected(old_pseudo);
+									controller.addConnected(pseudo);
 								}
 								else {
 									UDP_Controller.illegal_pseudo(id);
@@ -63,6 +67,7 @@ class Receiving_thread extends Thread{
 							}
 							else if (state.equals("PSEUDO")) {
 								user.ActifUsers.put(id, pseudo);
+								controller.addConnected(pseudo);
 							}
 							else {
 								throw new IllegalArgumentException("Wrong first word in UDP message !!!");

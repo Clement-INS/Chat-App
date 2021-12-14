@@ -44,9 +44,6 @@ public class MainController {
 	protected void initialize() throws IOException {
 		
 		pseudoActuel.setText(App.user.GetPseudo());;
-		addConnected("Michel");
-		addConnected("Bernard");
-		addConnected("Tirie");
 
 		ArrayList<Message> list = new ArrayList<Message>();
 		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
