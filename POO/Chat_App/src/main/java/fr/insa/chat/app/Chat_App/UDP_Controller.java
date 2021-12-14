@@ -58,11 +58,11 @@ class Receiving_thread extends Thread{
 				socket.receive(receivePacket);
 				String msg = new String (receivePacket.getData(), 0, receivePacket.getLength());
 				String[] infos = msg.split(" ");
-				TimeUnit.SECONDS.sleep(5);
 				if (infos.length == 3) {
 					String state = infos[0];
 					String pseudo = infos[2];
-					InetAddress id = InetAddress.getByName(infos[1]);
+					//InetAddress id = InetAddress.getByName(infos[1]);
+					InetAddress id = receivePacket.getAddress();
 					if(id != user.GetId()) {
 						if (state.equals("CONNEXION")) {
 							UDP_Controller.answer_connexion(id, user);
@@ -71,6 +71,7 @@ class Receiving_thread extends Thread{
 								this.add_connected(pseudo);
 							}
 							else {
+								System.out.println("send : "+id.getHostAddress());
 								UDP_Controller.illegal_pseudo(id);
 							}
 						}
@@ -158,6 +159,7 @@ public class UDP_Controller{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("send : "+msg+" "+dest.getHostAddress());
 	}
 
 	/**
