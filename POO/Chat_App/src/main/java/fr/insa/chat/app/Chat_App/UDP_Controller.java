@@ -6,80 +6,103 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 
+import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
 class Receiving_thread extends Thread{
 
 	private UserModel user;
+	private MainController controller;
 
-	protected Receiving_thread(UserModel user) {
+	protected Receiving_thread(UserModel user, MainController controller) {
 		this.user = user;
+		this.controller = controller;
 	}
 
+	private void add_connected(String pseudo) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					controller.addConnected(pseudo);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	private void remove_connected(String pseudo) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				controller.removeConnected(pseudo);
+			}
+		});
+	}
 	/**
 	 * Receive udp messages and acts according to the message
 	 */
 	@Override
 	public void run() {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("RootLayoutController.fxml"));
-			if (loader.getController().getClass().getSimpleName().equals("MainController")) {
-				MainController controller = loader.getController();
-				DatagramSocket socket = new DatagramSocket(1031);
-				byte[] receiveData = new byte[40];
-				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-				while(true) {
-					socket.receive(receivePacket);
-					String msg = new String (receivePacket.getData(), 0, receivePacket.getLength());
-					String[] infos = msg.split(" ");
-					if (infos.length == 3) {
-						String state = infos[0];
-						String pseudo = infos[2];
-						InetAddress id = InetAddress.getByName(infos[1]);
-						if(id != user.GetId()) {
-							if (state.equals("CONNEXION")) {
-								UDP_Controller.answer_connexion(id, user);
-								if (!pseudo.equals(user.GetPseudo())) {
-									user.ActifUsers.put(id, pseudo);
-									controller.addConnected(pseudo);
-								}
-								else {
-									UDP_Controller.illegal_pseudo(id);
-								}
-							}
-							else if (state.equals("DISCONNEXION")) {
-								user.ActifUsers.remove(id);
-								controller.removeConnected(pseudo);
-							}
-							else if (state.equals("CHANGE")) {
-								if (!pseudo.equals(user.GetPseudo())) {
-									String old_pseudo = user.ActifUsers.get(id);
-									user.ActifUsers.put(id, pseudo);
-									controller.removeConnected(old_pseudo);
-									controller.addConnected(pseudo);
-								}
-								else {
-									UDP_Controller.illegal_pseudo(id);
-								}
-							}
-							else if (state.equals("PSEUDO")) {
+			DatagramSocket socket = new DatagramSocket(1031);
+			byte[] receiveData = new byte[40];
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			while(true) {
+				socket.receive(receivePacket);
+				String msg = new String (receivePacket.getData(), 0, receivePacket.getLength());
+				String[] infos = msg.split(" ");
+				TimeUnit.SECONDS.sleep(5);
+				if (infos.length == 3) {
+					String state = infos[0];
+					String pseudo = infos[2];
+					InetAddress id = InetAddress.getByName(infos[1]);
+					if(id != user.GetId()) {
+						if (state.equals("CONNEXION")) {
+							UDP_Controller.answer_connexion(id, user);
+							if (!pseudo.equals(user.GetPseudo())) {
 								user.ActifUsers.put(id, pseudo);
-								controller.addConnected(pseudo);
+								this.add_connected(pseudo);
 							}
 							else {
-								throw new IllegalArgumentException("Wrong first word in UDP message !!!");
+								UDP_Controller.illegal_pseudo(id);
 							}
 						}
+						else if (state.equals("DISCONNEXION")) {
+							user.ActifUsers.remove(id);
+							this.remove_connected(pseudo);
+						}
+						else if (state.equals("CHANGE")) {
+							if (!pseudo.equals(user.GetPseudo())) {
+								String old_pseudo = user.ActifUsers.get(id);
+								user.ActifUsers.put(id, pseudo);
+								this.remove_connected(old_pseudo);
+								this.add_connected(pseudo);
+							}
+							else {
+								UDP_Controller.illegal_pseudo(id);
+							}
+						}
+						else if (state.equals("PSEUDO")) {
+							user.ActifUsers.put(id, pseudo);
+							this.add_connected(pseudo);
+						}
+						else {
+							throw new IllegalArgumentException("Wrong first word in UDP message !!!");
+						}
 					}
-					else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-						App.setRoot("AccueilLoginBis");
-					}
-					else {
-						throw new IllegalArgumentException("Wrong UDP size message !!!");
-					}
+				}
+				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
+					App.setRoot("AccueilLoginBis");
+				}
+				else {
+					throw new IllegalArgumentException("Wrong UDP size message !!!");
 				}
 			}
 		} catch (Exception e) {
@@ -156,13 +179,15 @@ public class UDP_Controller{
 		UDP_Controller.send(msg, dest);
 	}
 
+	protected static void start_receiving_thread(UserModel user, MainController controller) {
+		Receiving_thread rt = new Receiving_thread(user, controller);
+		rt.start();
+	}
 	/**
 	 * Send a broadcast to everyone to tell them user just connected with a pseudo and ask if it is valid
 	 * @param user
 	 */
 	protected static void connexion(UserModel user) {
-		Receiving_thread rt = new Receiving_thread(user);
-		rt.start();
 		String msg = "CONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}

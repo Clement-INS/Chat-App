@@ -43,6 +43,7 @@ public class MainController {
 	@FXML
 	protected void initialize() throws IOException {
 		
+		UDP_Controller.start_receiving_thread(App.user, this);
 		pseudoActuel.setText(App.user.GetPseudo());;
 
 		ArrayList<Message> list = new ArrayList<Message>();
