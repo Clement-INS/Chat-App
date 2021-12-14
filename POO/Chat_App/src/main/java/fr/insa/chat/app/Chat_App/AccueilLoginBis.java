@@ -14,9 +14,9 @@ public class AccueilLoginBis {
 	public void connect(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER) {
 			String pseudo = pseudoField.getText();
+			App.user.SetPseudo(pseudo);
 			App.reSize(575, 530);
 	        App.setRoot("MenuPrincipal");
-	        App.user.SetPseudo(pseudo);
 		}
 	}
 }
