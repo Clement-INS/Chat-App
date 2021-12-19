@@ -6,10 +6,8 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.lang.IllegalArgumentException;
@@ -45,6 +43,16 @@ class Receiving_thread extends Thread{
 			}
 		});
 	}
+	
+	private void reSize(int a, int b) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				App.reSize(a,b);
+			}
+		});
+	}
+	
 	/**
 	 * Receive udp messages and acts according to the message
 	 */
@@ -63,7 +71,6 @@ class Receiving_thread extends Thread{
 				if (infos.length == 3) {
 					String state = infos[0];
 					String pseudo = infos[2];
-					//InetAddress id = InetAddress.getByName(infos[1]);
 					InetAddress id = receivePacket.getAddress();
 					if(id != user.GetId()) {
 						if (state.equals("CONNEXION")) {
@@ -103,6 +110,7 @@ class Receiving_thread extends Thread{
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
 					System.out.println("a");
+					this.reSize(600, 360);
 					App.setRoot("AccueilLoginBis");
 				}
 				else {
@@ -172,7 +180,7 @@ public class UDP_Controller{
 	 */
 	protected static void answer_connexion(InetAddress dest, UserModel user) {
 		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
-		UDP_Controller.send(msg, dest);
+		UDP_Controller.send(msg, dest);App.reSize(600,360);
 	}
 
 	/**
