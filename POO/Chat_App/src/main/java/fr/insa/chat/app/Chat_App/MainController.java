@@ -53,7 +53,7 @@ public class MainController {
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLogin");
-		App.reSize(600, 360);
+		App.reSize(1000, 800);
 	}
 
 	@FXML
