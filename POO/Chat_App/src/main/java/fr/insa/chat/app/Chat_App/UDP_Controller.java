@@ -17,8 +17,11 @@ class Receiving_thread extends Thread{
 	private UserModel user;
 	private MainController controller;
 
-	protected Receiving_thread(UserModel user, MainController controller) {
+	protected Receiving_thread(UserModel user) {
 		this.user = user;
+	}
+	
+	protected void SetController(MainController controller) {
 		this.controller = controller;
 	}
 
@@ -27,7 +30,9 @@ class Receiving_thread extends Thread{
 			@Override
 			public void run() {
 				try {
-					controller.addConnected(pseudo);
+					if (controller != null) {
+						controller.addConnected(pseudo);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -39,7 +44,9 @@ class Receiving_thread extends Thread{
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				controller.removeConnected(pseudo);
+				if (controller != null) {
+					controller.removeConnected(pseudo);;
+				}
 			}
 		});
 	}
@@ -124,7 +131,19 @@ class Receiving_thread extends Thread{
 }
 
 public class UDP_Controller{
+	
+	private static UDP_Controller singleton;
+	protected Receiving_thread rt;
 
+	public static UDP_Controller getController() {
+		if (singleton == null) {
+			singleton = new UDP_Controller();
+		}
+		return singleton;
+	}
+	
+	private UDP_Controller() {}
+	
 	/**
 	 * Send a msg in broadcast to everyone on the LAN
 	 * @param msg
@@ -192,10 +211,11 @@ public class UDP_Controller{
 		UDP_Controller.send(msg, dest);
 	}
 
-	protected static void start_receiving_thread(UserModel user, MainController controller) {
-		Receiving_thread rt = new Receiving_thread(user, controller);
-		rt.start();
+	protected void start_receiving_thread(UserModel user) {
+		this.rt = new Receiving_thread(user);
+		this.rt.start();
 	}
+	
 	/**
 	 * Send a broadcast to everyone to tell them user just connected with a pseudo and ask if it is valid
 	 * @param user

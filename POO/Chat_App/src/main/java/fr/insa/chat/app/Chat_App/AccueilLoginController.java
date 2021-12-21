@@ -18,6 +18,7 @@ public class AccueilLoginController {
 		if(key.getCode() == KeyCode.ENTER) {
 			String pseudo = pseudoField.getText();
 			App.user = new UserModel(pseudo);
+			UDP_Controller.getController().start_receiving_thread(App.user);
 			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
 			App.reSize(1000, 800);
 			App.setRoot("Main");
