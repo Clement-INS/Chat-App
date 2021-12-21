@@ -45,6 +45,9 @@ public class MainController {
 		
 		UDP_Controller.getController().rt.SetController(this);
 		pseudoActuel.setText(App.user.GetPseudo());;
+		for (String pseudo  : App.user.ActifUsers.values()) {
+			addConnected(pseudo);
+		}
 
 		ArrayList<Message> list = new ArrayList<Message>();
 		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
@@ -54,7 +57,7 @@ public class MainController {
 
 	@FXML
 	private void changePseudo() throws IOException {
-		App.setRoot("AccueilLogin");
+		App.setRoot("AccueilLoginBis");
 		App.reSize(600, 360);
 	}
 

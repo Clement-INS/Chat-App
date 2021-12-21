@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javafx.application.Platform;
 
@@ -70,16 +71,22 @@ class Receiving_thread extends Thread{
 			byte[] receiveData = new byte[40];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			while(true) {
-				System.out.println("b");
 				socket.receive(receivePacket);
 				String msg = new String (receivePacket.getData(), 0, receivePacket.getLength());
-				System.out.println("message : "+msg);
+				System.out.println("received : "+msg);
 				String[] infos = msg.split(" ");
-				if (infos.length == 3) {
+				if (infos.length == 2) {
 					String state = infos[0];
-					String pseudo = infos[2];
+					String pseudo = infos[1];
 					InetAddress id = receivePacket.getAddress();
-					if(id != user.GetId()) {
+					boolean sameId = false;
+					Iterator iter = user.GetIds().iterator();
+					while (iter.hasNext() && !sameId) {
+						if (id.equals(iter.next())) {
+							sameId = true;
+						}
+					}
+					if(!sameId) {
 						if (state.equals("CONNEXION")) {
 							UDP_Controller.answer_connexion(id, user);
 							if (!pseudo.equals(user.GetPseudo())) {
@@ -87,7 +94,6 @@ class Receiving_thread extends Thread{
 								this.add_connected(pseudo);
 							}
 							else {
-								System.out.println("send : "+id.getHostAddress());
 								UDP_Controller.illegal_pseudo(id);
 							}
 						}
@@ -116,7 +122,6 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					System.out.println("a");
 					this.reSize(600, 360);
 					App.setRoot("AccueilLoginBis");
 				}
@@ -198,8 +203,8 @@ public class UDP_Controller{
 	 * @param user
 	 */
 	protected static void answer_connexion(InetAddress dest, UserModel user) {
-		String msg = "PSEUDO "+ user.GetId().getHostName() + " " + user.GetPseudo();
-		UDP_Controller.send(msg, dest);App.reSize(600,360);
+		String msg = "PSEUDO " + user.GetPseudo();
+		UDP_Controller.send(msg, dest);
 	}
 
 	/**
@@ -221,8 +226,7 @@ public class UDP_Controller{
 	 * @param user
 	 */
 	protected static void connexion(UserModel user) {
-		System.out.println(user.GetId().getHostAddress());
-		String msg = "CONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
+		String msg = "CONNEXION " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}
 
@@ -231,7 +235,7 @@ public class UDP_Controller{
 	 * @param user
 	 */
 	protected static void disconnexion(UserModel user) {
-		String msg = "DISCONNEXION " + user.GetId().getHostName() + " " + user.GetPseudo();
+		String msg = "DISCONNEXION " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}
 
@@ -240,7 +244,7 @@ public class UDP_Controller{
 	 * @param user
 	 */
 	protected static void change(UserModel user) {
-		String msg = "CHANGE " + user.GetId().getHostName() + " " + user.GetPseudo();
+		String msg = "CHANGE " + user.GetPseudo();
 		UDP_Controller.send_broadcast(msg);
 	}
 }
