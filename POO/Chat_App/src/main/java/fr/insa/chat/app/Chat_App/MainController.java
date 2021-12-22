@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +37,8 @@ public class MainController {
 	@FXML private VBox connectedUserList;
 	
 	@FXML private ListView<String> inDiscussionWith;
+	
+	private ClientConversationThreadManager SendingThread;
 
 	Alert alert = new Alert(AlertType.ERROR,
 			"tu parles dans le vide gros malin", 
@@ -44,7 +48,7 @@ public class MainController {
 	protected void initialize() throws IOException {
 		
 		UDP_Controller.getController().rt.SetController(this);
-		pseudoActuel.setText(App.user.GetPseudo());;
+		pseudoActuel.setText(App.user.GetPseudo());
 		for (String pseudo  : App.user.ActifUsers.values()) {
 			addConnected(pseudo);
 		}
@@ -106,6 +110,7 @@ public class MainController {
 					String date = currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
+					this.SendingThread.send(messageText);
 				}
 				else{
 					alert.show();
@@ -127,7 +132,6 @@ public class MainController {
 				addMessageTo(date,content);
 			}
 		}
-
 	}
 
 	@FXML
@@ -164,9 +168,20 @@ public class MainController {
 		VBox parent = (VBox)pane.getParent();
 		parent.getChildren().remove(pane);
 
-		String user = messageLabel.getText();
-		inDiscussionWith.getItems().add(user);
-
+		String pseudo = messageLabel.getText();
+		inDiscussionWith.getItems().add(pseudo);
+		InetAddress dest = null;
+		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
+	        if (Objects.equals(pseudo, entry.getValue())) {
+	            dest = entry.getKey();
+	        }
+	    }
+		if (dest == null) {
+			throw new NoSuchFieldError("No adress corresponding to this user");
+		}
+		else {
+			this.SendingThread = new ClientConversationThreadManager(dest);
+		}
 	}
 
 	private String getPseudoFromIndex(int index){
@@ -177,7 +192,6 @@ public class MainController {
 	private void updateCurrentDiscussion(){
 		if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
-			String name = getPseudoFromIndex(App.currentDiscussionIndex);
 			resetMessage();
 		} 
 	}

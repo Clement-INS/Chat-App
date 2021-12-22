@@ -23,9 +23,7 @@ class ThreadAcceptServer extends Thread {
 	 */
 	@Override
     public void run() {
-		int id = 0;
 		BufferedReader in;
-		PrintWriter out;
 		ServerSocket socketserver;
 		Socket convsocket;
 		try {
@@ -33,13 +31,9 @@ class ThreadAcceptServer extends Thread {
 			
 			while(true) {
 				convsocket = socketserver.accept();
-				out = new PrintWriter(convsocket.getOutputStream());
 			    in = new BufferedReader (new InputStreamReader (convsocket.getInputStream()));
-			    SendingThreadServer st = new SendingThreadServer(out, id);
-			    st.start();
-			    ReceivingThreadServer rt = new ReceivingThreadServer(in, out, convsocket, socketserver);
+			    ReceivingThreadServer rt = new ReceivingThreadServer(in, convsocket, socketserver);
 			    rt.start();
-			    id++;
 			}
 		}
 		catch (IOException e) {
@@ -48,60 +42,9 @@ class ThreadAcceptServer extends Thread {
 	}
 }
 
-class SendingThreadServer extends Thread {
-	
-	PrintWriter out;
-	int id;
-	
-	/**
-	 * SendingThreadServer constructor
-	 * @param out PrintWriter corresponding to the client the thread is chating to
-	 * @param id Id of the Thread, 0 for the first one created and then it's increasing
-	 */
-	protected SendingThreadServer(PrintWriter out, int id) {
-		this.out = out;
-		this.id = id;
-	}
-	
-	/**
-	 * Read messages from stdin and send them to the corresponding out client.
-	 * The id identifies each thread.
-	 */
-	synchronized public void run() {
-		int index_message = 0;
-		String msg;
-		Scanner sc = new Scanner(System.in);
-        while(true){
-        	if (this.id == 0) {
-        		msg = sc.nextLine();
-        		ServerConversationThreadManager.messages.add(msg);
-        		out.println(msg);
-            	out.flush();
-        	}
-        	else {
-        		while((ServerConversationThreadManager.messages.size()) == index_message) {
-        			try {
-						TimeUnit.SECONDS.sleep(1);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-        		}
-        		for (int i = index_message; i < ServerConversationThreadManager.messages.size(); i++) {
-        			msg = ServerConversationThreadManager.messages.get(index_message);
-        			out.println(msg);
-                	out.flush();
-                	index_message++;
-        		}
-        	}     	
-        }
-     }
-}
-
 class ReceivingThreadServer extends Thread{
 	
 	BufferedReader in;
-	PrintWriter out;
 	Socket convsocket;
 	
 	/**
@@ -110,9 +53,8 @@ class ReceivingThreadServer extends Thread{
 	 * @param out PrintWriter corresponding to the client the thread is chating to
 	 * @param convsocket Socket corresponding to the conversation with the client
 	 */
-	protected ReceivingThreadServer(BufferedReader in, PrintWriter out, Socket convsocket, ServerSocket socketserver) {
+	protected ReceivingThreadServer(BufferedReader in, Socket convsocket, ServerSocket socketserver) {
 		this.in = in;
-		this.out = out;
 		this.convsocket = convsocket;
 	}
 	
@@ -128,8 +70,7 @@ class ReceivingThreadServer extends Thread{
                msg = in.readLine();
             }
             System.out.println("Client disconnected");
-            //close session
-            out.close();
+            in.close();
             convsocket.close();
          } catch (IOException e) {
               e.printStackTrace();
@@ -139,12 +80,11 @@ class ReceivingThreadServer extends Thread{
 
 
 public class ServerConversationThreadManager {
-	protected static ArrayList<String> messages = new ArrayList<String>();
 	
 	/**
 	 * Start the Server thread responsible for the accept state
 	 */
-	public void AcceptConversation() {
+	public static void acceptConversation() {
 		ThreadAcceptServer accept = new ThreadAcceptServer();
 		accept.start();
 	}

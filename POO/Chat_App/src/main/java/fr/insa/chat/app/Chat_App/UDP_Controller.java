@@ -80,7 +80,7 @@ class Receiving_thread extends Thread{
 					String pseudo = infos[1];
 					InetAddress id = receivePacket.getAddress();
 					boolean sameId = false;
-					Iterator iter = user.GetIds().iterator();
+					Iterator<InetAddress> iter = user.GetIds().iterator();
 					while (iter.hasNext() && !sameId) {
 						if (id.equals(iter.next())) {
 							sameId = true;

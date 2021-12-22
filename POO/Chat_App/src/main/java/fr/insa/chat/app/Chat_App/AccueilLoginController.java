@@ -19,7 +19,7 @@ public class AccueilLoginController {
 			String pseudo = pseudoField.getText();
 			App.user = new UserModel(pseudo);
 			UDP_Controller.getController().start_receiving_thread(App.user);
-			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
+			ServerConversationThreadManager.acceptConversation();
 			App.reSize(1000, 800);
 			App.setRoot("Main");
 		}
