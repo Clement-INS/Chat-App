@@ -22,7 +22,6 @@ import javafx.scene.layout.VBox;
 
 public class MainController {
 
-
 	@FXML private Button changePseudoButton;
 	@FXML private Label pseudoActuel;
 
@@ -137,7 +136,6 @@ public class MainController {
 				addMessageTo(date,content);
 			}
 		}
-
 	}
 
 	@FXML
@@ -169,11 +167,9 @@ public class MainController {
 	private void updateCurrentDiscussion(){
 		if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
-			String name = getPseudoFromIndex(App.currentDiscussionIndex);
 			resetMessage();
 		} 
 	}
-
 
 	@FXML
 	private void removeCurrentDiscussion(KeyEvent key) throws IOException {
@@ -190,5 +186,4 @@ public class MainController {
 			}
 		}
 	}
-
 }
