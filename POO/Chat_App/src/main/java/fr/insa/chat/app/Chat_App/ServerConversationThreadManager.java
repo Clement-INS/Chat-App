@@ -12,6 +12,8 @@ import java.lang.Thread;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
+
 
 
 class ThreadAcceptServer extends Thread {
@@ -61,6 +63,19 @@ class ReceivingThreadServer extends Thread{
 		this.distant = distant;
 	}
 
+	private void print_message(String msg) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ServerConversationThreadManager.controller.addMessageFrom(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	/**
 	 * Receive messages from client and close sockets when the client is disconnected
 	 */
@@ -72,7 +87,7 @@ class ReceivingThreadServer extends Thread{
 			while(received!=null){
 				if (ServerConversationThreadManager.controller != null) {
 					if (App.user.ActifUsers.get(this.distant).equals(arr[0])) {
-						ServerConversationThreadManager.controller.addMessageFrom(arr[1]);
+						print_message(arr[1]);
 					}
 				}
 				System.out.println("Client : "+received);

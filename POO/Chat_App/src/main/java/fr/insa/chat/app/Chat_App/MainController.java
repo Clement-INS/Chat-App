@@ -111,9 +111,7 @@ public class MainController {
 					String date = currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
-					int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
-					String pseudo = getPseudoFromIndex(index);
-					this.SendingThread.send(pseudo + " " + messageText);
+					this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
 				}
 				else{
 					alert.show();

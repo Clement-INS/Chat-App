@@ -176,6 +176,7 @@ public class UDP_Controller{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("broadcast : "+msg);
 	}
 
 	/**
