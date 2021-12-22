@@ -48,6 +48,7 @@ public class MainController {
 	protected void initialize() throws IOException {
 		
 		UDP_Controller.getController().rt.SetController(this);
+		ServerConversationThreadManager.controller = this;
 		pseudoActuel.setText(App.user.GetPseudo());
 		for (String pseudo  : App.user.ActifUsers.values()) {
 			addConnected(pseudo);
@@ -56,7 +57,7 @@ public class MainController {
 		ArrayList<Message> list = new ArrayList<Message>();
 		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
 		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-		loadMessages(list);
+		//loadMessages(list);
 	}
 
 	@FXML
@@ -82,8 +83,8 @@ public class MainController {
 		messageList.getChildren().add(pane);
 	}
 
-	public void addMessageFrom(String date, String content) throws IOException{
-		addMessage(date, content, "receivedMessage.fxml");
+	public void addMessageFrom(String content) throws IOException{
+		addMessage(currentDate(), content, "receivedMessage.fxml");
 	}
 
 	public void addMessageTo(String date, String content) throws IOException{
@@ -119,7 +120,7 @@ public class MainController {
 		}
 	}
 
-	private void loadMessages(ArrayList<Message> list) throws IOException{
+	/*private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
 			String content = m.getContent();
@@ -132,7 +133,7 @@ public class MainController {
 				addMessageTo(date,content);
 			}
 		}
-	}
+	}*/
 
 	@FXML
 	public void addConnected(String content) throws IOException{
