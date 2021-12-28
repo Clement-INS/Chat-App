@@ -38,7 +38,7 @@ public class MainController {
 	
 	@FXML private ListView<String> inDiscussionWith;
 	
-	private ClientConversationThreadManager SendingThread;
+	private HashMap <String, ClientConversationThreadManager> SendingThread;
 	private String currentDiscussionPseudo = "";
 
 	Alert alert = new Alert(AlertType.ERROR,
@@ -54,7 +54,9 @@ public class MainController {
 		for (String pseudo  : App.user.ActifUsers.values()) {
 			addConnected(pseudo);
 		}
-
+		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
+		
+		
 		ArrayList<Message> list = new ArrayList<Message>();
 		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
 		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
@@ -112,7 +114,8 @@ public class MainController {
 					String date = currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
-					this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
+					this.SendingThread.get(this.currentDiscussionPseudo).send(App.user.GetPseudo() + " " + messageText);
+					//this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
 				}
 				else{
 					alert.show();
@@ -185,8 +188,7 @@ public class MainController {
 			throw new NoSuchFieldError("No adress corresponding to this user");
 		}
 		else {
-			this.SendingThread = new ClientConversationThreadManager(dest);
-			this.currentDiscussionPseudo = pseudo;
+			this.SendingThread.put(pseudo, new ClientConversationThreadManager(dest));
 		}
 	}
 
@@ -198,6 +200,7 @@ public class MainController {
 	private void updateCurrentDiscussion(){
 		if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
+			this.currentDiscussionPseudo = inDiscussionWith.getItems().get(App.currentDiscussionIndex);
 			resetMessage();
 		} 
 	}
@@ -215,6 +218,7 @@ public class MainController {
 				resetMessage();
 				App.currentDiscussionIndex = -1; 
 				updateCurrentDiscussion(); 
+				this.currentDiscussionPseudo = "";
 			}
 		}
 	}
