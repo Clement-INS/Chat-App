@@ -83,10 +83,10 @@ class ReceivingThreadServer extends Thread{
 		String received;
 		try {
 			received = in.readLine();
-			String arr[] = received.split(" ", 2);
 			while(received!=null){
+				String arr[] = received.split(" ", 2);
 				if (ServerConversationThreadManager.controller != null) {
-					if (App.user.ActifUsers.get(this.distant).equals(arr[0])) {
+					if (App.user.ActifUsers.get(this.distant).equals(arr[0]) && ServerConversationThreadManager.controller.getPseudoCurrentDiscussion().equals(arr[0])) {
 						print_message(arr[1]);
 					}
 				}

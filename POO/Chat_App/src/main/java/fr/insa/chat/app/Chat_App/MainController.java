@@ -39,6 +39,7 @@ public class MainController {
 	@FXML private ListView<String> inDiscussionWith;
 	
 	private ClientConversationThreadManager SendingThread;
+	private String currentDiscussionPseudo = "";
 
 	Alert alert = new Alert(AlertType.ERROR,
 			"tu parles dans le vide gros malin", 
@@ -164,6 +165,9 @@ public class MainController {
 	}
 
 
+	/*
+	 * when click on active conversation  to talk to a user, start a connection to send messages.
+	 */
 	private void startChatWith(AnchorPane pane){
 		Label messageLabel = (Label) pane.getChildren().get(0);
 		VBox parent = (VBox)pane.getParent();
@@ -182,6 +186,7 @@ public class MainController {
 		}
 		else {
 			this.SendingThread = new ClientConversationThreadManager(dest);
+			this.currentDiscussionPseudo = pseudo;
 		}
 	}
 
@@ -212,6 +217,10 @@ public class MainController {
 				updateCurrentDiscussion(); 
 			}
 		}
+	}
+	
+	public String getPseudoCurrentDiscussion() {
+		return this.currentDiscussionPseudo;
 	}
 
 }
