@@ -6,7 +6,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Test{
 	public static void main(String[] args) {
-		System.out.println("yo");
+		try {
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*System.out.println("yo");
 		UserModel u1 = new UserModel("Jack");
 		DTBController d = new DTBController(u1);
 		try {
@@ -16,6 +22,6 @@ public class Test{
 			d.remove_DB();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 }

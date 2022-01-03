@@ -1,13 +1,18 @@
 package fr.insa.chat.app.Chat_App;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -22,6 +27,7 @@ import javafx.scene.layout.VBox;
 
 public class MainController {
 
+
 	@FXML private Button changePseudoButton;
 	@FXML private Label pseudoActuel;
 
@@ -29,8 +35,11 @@ public class MainController {
 	@FXML private TextField textMsgField;
 
 	@FXML private VBox connectedUserList;
-
+	
 	@FXML private ListView<String> inDiscussionWith;
+	
+	private HashMap <String, ClientConversationThreadManager> SendingThread;
+	private String currentDiscussionPseudo = "";
 
 	Alert alert = new Alert(AlertType.ERROR,
 			"tu parles dans le vide gros malin", 
@@ -38,21 +47,26 @@ public class MainController {
 
 	@FXML
 	protected void initialize() throws IOException {
-		pseudoActuel.setText(App.user.GetPseudo());;
-		addConnected("Michel");
-		addConnected("Bernard");
-		addConnected("Tirie");
-
+		
+		UDP_Controller.getController().rt.SetController(this);
+		ServerConversationThreadManager.controller = this;
+		pseudoActuel.setText(App.user.GetPseudo());
+		for (String pseudo  : App.user.ActifUsers.values()) {
+			addConnected(pseudo);
+		}
+		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
+		
+		
 		ArrayList<Message> list = new ArrayList<Message>();
 		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
 		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-		loadMessages(list);
+		//loadMessages(list);
 	}
 
 	@FXML
 	private void changePseudo() throws IOException {
-		App.setRoot("AccueilLogin");
-		App.reSize(1000, 800);
+		App.setRoot("AccueilLoginBis");
+		App.reSize(600, 360);
 	}
 
 	@FXML
@@ -72,8 +86,8 @@ public class MainController {
 		messageList.getChildren().add(pane);
 	}
 
-	public void addMessageFrom(String date, String content) throws IOException{
-		addMessage(date, content, "receivedMessage.fxml");
+	public void addMessageFrom(String content) throws IOException{
+		addMessage(currentDate(), content, "receivedMessage.fxml");
 	}
 
 	public void addMessageTo(String date, String content) throws IOException{
@@ -100,6 +114,8 @@ public class MainController {
 					String date = currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
+					this.SendingThread.get(this.currentDiscussionPseudo).send(App.user.GetPseudo() + " " + messageText);
+					//this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
 				}
 				else{
 					alert.show();
@@ -107,8 +123,8 @@ public class MainController {
 			}  
 		}
 	}
-
-	@FXML
+  
+  @FXML
 	private void sendMessageButton() throws IOException {
 		String messageText = textMsgField.getText();
 		if (!messageText.isEmpty()){
@@ -123,7 +139,7 @@ public class MainController {
 		}  
 	}
 
-	private void loadMessages(ArrayList<Message> list) throws IOException{
+	/*private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
 			String content = m.getContent();
@@ -136,7 +152,7 @@ public class MainController {
 				addMessageTo(date,content);
 			}
 		}
-	}
+	}*/
 
 	@FXML
 	public void addConnected(String content) throws IOException{
@@ -148,15 +164,47 @@ public class MainController {
 
 		messageLabel.setText(content);
 		connectedUserList.getChildren().add(pane);
+		
 	}
 
+	@FXML
+	public void removeConnected(String pseudo){
+		AnchorPane pane;
+		int i = 0;
+		for (Node n : connectedUserList.getChildren()) {
+			pane = (AnchorPane) n;
+			Label name = (Label)pane.getChildren().get(0);
+			if (name.getText().equals(pseudo)) {
+				connectedUserList.getChildren().remove(i);
+				break;
+			}
+			i++;
+		}
+	}
+
+
+	/*
+	 * when click on active conversation  to talk to a user, start a connection to send messages.
+	 */
 	private void startChatWith(AnchorPane pane){
 		Label messageLabel = (Label) pane.getChildren().get(0);
 		VBox parent = (VBox)pane.getParent();
 		parent.getChildren().remove(pane);
 
-		String user = messageLabel.getText();
-		inDiscussionWith.getItems().add(user);
+		String pseudo = messageLabel.getText();
+		inDiscussionWith.getItems().add(pseudo);
+		InetAddress dest = null;
+		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
+	        if (Objects.equals(pseudo, entry.getValue())) {
+	            dest = entry.getKey();
+	        }
+	    }
+		if (dest == null) {
+			throw new NoSuchFieldError("No adress corresponding to this user");
+		}
+		else {
+			this.SendingThread.put(pseudo, new ClientConversationThreadManager(dest));
+		}
 	}
 
 	private String getPseudoFromIndex(int index){
@@ -167,9 +215,11 @@ public class MainController {
 	private void updateCurrentDiscussion(){
 		if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
+			this.currentDiscussionPseudo = inDiscussionWith.getItems().get(App.currentDiscussionIndex);
 			resetMessage();
 		} 
 	}
+
 
 	@FXML
 	private void removeCurrentDiscussion(KeyEvent key) throws IOException {
@@ -183,7 +233,13 @@ public class MainController {
 				resetMessage();
 				App.currentDiscussionIndex = -1; 
 				updateCurrentDiscussion(); 
+				this.currentDiscussionPseudo = "";
 			}
 		}
 	}
+	
+	public String getPseudoCurrentDiscussion() {
+		return this.currentDiscussionPseudo;
+	}
+
 }

@@ -16,9 +16,11 @@ public class AccueilLoginController {
 
 	public void connect(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER) {
-      String pseudo = pseudoField.getText();
+			String pseudo = pseudoField.getText();
 			App.user = new UserModel(pseudo);
-			ServerConversationThreadManager serv_TCP = new ServerConversationThreadManager();
+			UDP_Controller.getController().start_receiving_thread(App.user);
+			ServerConversationThreadManager.acceptConversation();
+			App.reSize(1000, 800);
 			App.setRoot("Main");
 		}
 	}
