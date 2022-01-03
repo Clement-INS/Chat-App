@@ -66,7 +66,7 @@ public class MainController {
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLoginBis");
-		App.reSize(600, 360);
+		App.reSize(1000, 800);
 	}
 
 	@FXML
@@ -124,6 +124,21 @@ public class MainController {
 		}
 	}
 
+	@FXML
+    private void sendMessageButton() throws IOException {
+        String messageText = textMsgField.getText();
+        if (!messageText.isEmpty()){
+            if(App.currentDiscussionIndex >= 0){
+                String date = currentDate();
+                addMessageTo(date,messageText);
+                textMsgField.clear();
+            }
+            else{
+                alert.show();
+            }
+        }
+    }
+	
 	/*private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
