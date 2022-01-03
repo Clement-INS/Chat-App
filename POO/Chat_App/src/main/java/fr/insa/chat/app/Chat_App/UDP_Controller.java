@@ -90,8 +90,8 @@ class Receiving_thread extends Thread{
 						if (state.equals("CONNEXION")) {
 							UDP_Controller.answer_connexion(id, user);
 							if (!pseudo.equals(user.GetPseudo())) {
-								user.ActifUsers.put(id, pseudo);
 								this.add_connected(pseudo);
+								user.ActifUsers.put(id, pseudo);
 							}
 							else {
 								UDP_Controller.illegal_pseudo(id);
@@ -122,7 +122,7 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					this.reSize(600, 360);
+					this.reSize(1000, 800);
 					App.setRoot("AccueilLoginBis");
 				}
 				else {
