@@ -107,7 +107,7 @@ public class DTBController{
 				System.out.print(res.getString(1)+" : ");
 				System.out.print(res.getString(2)+" : ");
 				System.out.print(res.getInt(3)+" : ");
-				System.out.println(res.getInt(4)+";");
+				System.out.println(res.getString(4)+";");
 			}
 		}
 		catch (SQLException e) {

@@ -111,7 +111,6 @@ public class MainController {
 					addMessageTo(date,messageText);
 					textMsgField.clear();
 					this.SendingThread.get(this.currentDiscussionPseudo).send(messageText);
-					//this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
 				}
 				else{
 					alert.show();

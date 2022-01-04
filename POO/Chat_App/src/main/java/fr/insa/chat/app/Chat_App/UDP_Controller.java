@@ -106,7 +106,6 @@ class Receiving_thread extends Thread{
 						}
 						else if (state.equals("PSEUDO")) {
 							user.ActifUsers.put(id, pseudo);
-							this.add_connected(pseudo);
 						}
 						else {
 							throw new IllegalArgumentException("Wrong first word in UDP message !!!");
