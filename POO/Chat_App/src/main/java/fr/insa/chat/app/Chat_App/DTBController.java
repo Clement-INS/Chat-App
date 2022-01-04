@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javafx.util.Pair;
-
 import java.net.InetAddress;
 import java.io.File;
 
@@ -18,7 +16,7 @@ public class DTBController{
 	private static DTBController singleton;
 	private String DB_URL;
 	private String DatabaseName;
-	
+
 	private DTBController() {
 		String DatabaseName = "Databases/localmessages.db";
 		this.DatabaseName = DatabaseName;
@@ -46,7 +44,7 @@ public class DTBController{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static DTBController getInstance() {
 		if (singleton == null) {
 			singleton = new DTBController();
@@ -74,17 +72,17 @@ public class DTBController{
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected ArrayList <Message> getMessagesFromConv(InetAddress id) {
 		try (Connection con = DriverManager.getConnection(DB_URL)){
 			String str_id = id.getHostAddress();
 			Statement stmt = con.createStatement();
 			String sql = "SELECT\n"
-						+ "msg,\n"
-						+ "isSend,\n"
-						+ "date\n"
-						+ "FROM messages\n"
-						+ "WHERE id = '"+str_id+"'\n";
+					+ "msg,\n"
+					+ "isSend,\n"
+					+ "date\n"
+					+ "FROM messages\n"
+					+ "WHERE id = '"+str_id+"'\n";
 			ResultSet res =  stmt.executeQuery(sql);
 			ArrayList <Message> msgList = new ArrayList();
 			while(res.next()) {

@@ -21,7 +21,7 @@ class Receiving_thread extends Thread{
 	protected Receiving_thread(UserModel user) {
 		this.user = user;
 	}
-	
+
 	protected void SetController(MainController controller) {
 		this.controller = controller;
 	}
@@ -51,7 +51,7 @@ class Receiving_thread extends Thread{
 			}
 		});
 	}
-	
+
 	/**
 	 * Receive udp messages and acts according to the message
 	 */
@@ -126,7 +126,7 @@ class Receiving_thread extends Thread{
 }
 
 public class UDP_Controller{
-	
+
 	private static UDP_Controller singleton;
 	protected Receiving_thread rt;
 
@@ -136,9 +136,9 @@ public class UDP_Controller{
 		}
 		return singleton;
 	}
-	
+
 	private UDP_Controller() {}
-	
+
 	/**
 	 * Send a msg in broadcast to everyone on the LAN
 	 * @param msg
@@ -211,7 +211,7 @@ public class UDP_Controller{
 		this.rt = new Receiving_thread(user);
 		this.rt.start();
 	}
-	
+
 	/**
 	 * Send a broadcast to everyone to tell them user just connected with a pseudo and ask if it is valid
 	 * @param user

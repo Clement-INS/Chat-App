@@ -10,9 +10,9 @@ import javafx.scene.input.KeyEvent;
 
 public class AccueilLoginBis {
 
-	
+
 	@FXML private TextField pseudoField;
-	
+
 	public void connect(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER) {
 			App.user.setValid(true);

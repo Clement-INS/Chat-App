@@ -6,10 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Objects;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,7 +22,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Pair;
 
 public class MainController {
 
@@ -39,9 +35,9 @@ public class MainController {
 	@FXML private VBox connectedUserList;
 
 	@FXML private ListView<String> inDiscussionWith;
-	
-    @FXML private ScrollPane scrollMessage; 
-	
+
+	@FXML private ScrollPane scrollMessage; 
+
 	private HashMap <String, ClientConversationThreadManager> SendingThread;
 	private String currentDiscussionPseudo = "";
 
@@ -90,10 +86,10 @@ public class MainController {
 		dateLabel.setText(date);
 
 		messageList.getChildren().add(pane);
-		
-		 scrollMessage.applyCss();
-	     scrollMessage.layout();
-	     scrollMessage.setVvalue(1.0);
+
+		scrollMessage.applyCss();
+		scrollMessage.layout();
+		scrollMessage.setVvalue(1.0);
 	}
 
 	/*
@@ -167,25 +163,10 @@ public class MainController {
 		}  
 	}
 
-	/*private void loadMessages(ArrayList<Message> list) throws IOException{
-		for(Message m : list){
-			Boolean from = m.getFrom();
-			String content = m.getContent();
-			String date = m.getDate();
-
-			if (from){
-				addMessageFrom(date,content);
-			}
-			else{
-				addMessageTo(date,content);
-			}
-		}
-	}*/
-
-   /*
-	* Add a new user and his JavaFX components to the connected user list on connection or when
-	* a user is deleted from the active conversation list
-	*/
+	/*
+	 * Add a new user and his JavaFX components to the connected user list on connection or when
+	 * a user is deleted from the active conversation list
+	 */
 	@FXML
 	public void addConnected(String content) throws IOException{
 		FXMLLoader loader = new FXMLLoader();   
@@ -199,9 +180,9 @@ public class MainController {
 
 	}
 
-   /*
-	* Remove a user and his JavaFX components from the connectedUserList or the inDiscussionWith list 
-	*/
+	/*
+	 * Remove a user and his JavaFX components from the connectedUserList or the inDiscussionWith list 
+	 */
 	@FXML
 	public void removeConnected(String pseudo){
 		AnchorPane pane;
@@ -217,11 +198,10 @@ public class MainController {
 			}
 			i++;
 		}
-		while (!removed) {    
-			int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(j);
-			String name = getPseudoFromIndex(index);
+		while (!removed && j < inDiscussionWith.getItems().size()) {    
+			String name = getPseudoFromIndex(j);
 			if (name.equals(pseudo)) {
-				inDiscussionWith.getItems().remove(index);
+				inDiscussionWith.getItems().remove(j);
 				removed = true;
 			}
 			j++;
@@ -302,7 +282,7 @@ public class MainController {
 			}
 		}
 	}
-	
+
 	/*
 	 * return the pseudo of the user you are currently chatting with
 	 */
