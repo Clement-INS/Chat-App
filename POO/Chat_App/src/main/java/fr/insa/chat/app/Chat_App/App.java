@@ -36,7 +36,6 @@ public class App extends Application {
 
     @Override
     public void stop(){
-        System.out.println("Stage is closing");
         UDP_Controller.disconnexion(App.user);
     	stage.close();
     }

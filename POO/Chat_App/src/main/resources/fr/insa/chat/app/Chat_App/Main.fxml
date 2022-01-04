@@ -129,7 +129,7 @@
                <children>
                   <VBox prefHeight="760.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <children>
-                        <ScrollPane prefHeight="670.0">
+                        <ScrollPane prefHeight="670.0" fx:id="scrollMessage">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

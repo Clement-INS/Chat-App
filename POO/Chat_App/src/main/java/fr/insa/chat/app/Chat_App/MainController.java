@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -38,16 +39,20 @@ public class MainController {
 	
 	@FXML private ListView<String> inDiscussionWith;
 	
+    @FXML private ScrollPane scrollMessage; 
+	
 	private HashMap <String, ClientConversationThreadManager> SendingThread;
 	private String currentDiscussionPseudo = "";
 
 	Alert alert = new Alert(AlertType.ERROR,
-			"tu parles dans le vide gros malin", 
+			"Selectionnez un destinataire", 
 			ButtonType.OK);
 
+	/*
+	 * Initialization of the main window, displaying the connected user list
+	 */
 	@FXML
 	protected void initialize() throws IOException {
-		
 		UDP_Controller.getController().rt.SetController(this);
 		ServerConversationThreadManager.controller = this;
 		pseudoActuel.setText(App.user.GetPseudo());
@@ -56,13 +61,23 @@ public class MainController {
 		}
 		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
 		
+		
+        addConnected("Trurue");
+        
 	}
 
+	/*
+	 * When button change pseudo is clicked, the user is back to the lobby and can change his pseudo
+	 */
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLoginBis");
 	}
 
+	/*
+	 * Adding a message to the VBox messageList with the right JavaFX component (those components are
+	 * different whether it is a received or a sent message
+	 */
 	@FXML
 	private void addMessage(String date, String content, String path) throws IOException{
 		FXMLLoader loader = new FXMLLoader();
@@ -78,27 +93,46 @@ public class MainController {
 		dateLabel.setText(date);
 
 		messageList.getChildren().add(pane);
+		
+		 scrollMessage.applyCss();
+	     scrollMessage.layout();
+	     scrollMessage.setVvalue(1.0);
 	}
 
+	/*
+	 * Invoke addMessage with the received message component 
+	 */
 	public void addMessageFrom(String content) throws IOException{
 		addMessage(currentDate(), content, "receivedMessage.fxml");
 	}
 
+	/*
+	 * Invoke addMessage with the sent message component 
+	 */
 	public void addMessageTo(String date, String content) throws IOException{
 		addMessage(date, content, "messageSent.fxml");
 	}
 
+	/*
+	 * Erase all the messages precedently displayed on screen
+	 */
 	public void resetMessage(){
 		messageList.getChildren().clear();
 	}
 
+	/*
+	 * Return the current date at the good format
+	 */
 	public String currentDate(){
 		Date date = new Date();
 		SimpleDateFormat formater = new SimpleDateFormat("'Le' dd MMMM 'à' HH:mm");;
 		return formater.format(date);
 	}
 
-
+	/*
+	 * When user type something in the textMsgField and press enter, the content of the field
+	 * is sent to the user selected, or if no user are selected, it displays an error
+	 */
 	@FXML
 	private void sendMessage(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.ENTER){
@@ -118,6 +152,9 @@ public class MainController {
 		}
 	}
 
+	/*
+	 * Same as sendMessage but with the Send button
+	 */
 	@FXML
     private void sendMessageButton() throws IOException {
         String messageText = textMsgField.getText();
@@ -149,7 +186,8 @@ public class MainController {
 	}*/
 
    /*
-	*add a new user and his JavaFX components to the connected user list
+	* Add a new user and his JavaFX components to the connected user list on connection or when
+	* a user is deleted from the active conversation list
 	*/
 	@FXML
 	public void addConnected(String content) throws IOException{
@@ -165,7 +203,7 @@ public class MainController {
 	}
 
    /*
-	*remove a user and his JavaFX components from the connectedUserList
+	* Remove a user and his JavaFX components from the connectedUserList or the inDiscussionWith list 
 	*/
 	@FXML
 	public void removeConnected(String pseudo){
@@ -196,7 +234,7 @@ public class MainController {
 	}
 
 	/*
-	 * when clicking on a user on connected user list, it adds this user to the active conversation list
+	 * When clicking on a user on connected user list, it adds this user to the active conversation list
 	 * and removes him from the connected user list
 	 */
 	private void startChatWith(AnchorPane pane){
@@ -221,12 +259,16 @@ public class MainController {
 	}
 
 	/*
-	 * 
+	 * Return the pseudo of a user from his index in the inDiscussionWith ListView
 	 */
 	private String getPseudoFromIndex(int index){
 		return inDiscussionWith.getItems().get(index).toString();
 	}
 
+	/*
+	 * When the user wants to chat with someone else it invokes this function that changes the user
+	 * current chat to the other one he wants
+	 */
 	@FXML
 	private void updateCurrentDiscussion(){
 		if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
@@ -238,7 +280,7 @@ public class MainController {
 
 
 	/*
-	 * stop a chat session with a user and delete all the JavaFX component related to this chat
+	 * Stop a chat session with a user and delete all the JavaFX component related to this chat
 	 * and add the user back to connected user list
 	 */
 	@FXML
@@ -258,6 +300,9 @@ public class MainController {
 		}
 	}
 	
+	/*
+	 * return the pseudo of the user you are currently chatting with
+	 */
 	public String getPseudoCurrentDiscussion() {
 		return this.currentDiscussionPseudo;
 	}
