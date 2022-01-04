@@ -3,6 +3,8 @@ package fr.insa.chat.app.Chat_App;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Map.Entry;
 import java.lang.String;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -51,5 +53,15 @@ public class UserModel {
 	
 	public ArrayList <InetAddress> GetIds() {
 		return Ids;
+	}
+	
+	public InetAddress getAddressFromPseudo(String pseudo) {
+		InetAddress dest = null;
+		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
+			if (Objects.equals(pseudo, entry.getValue())) {
+				dest = entry.getKey();
+			}
+		}
+		return dest;
 	}
 }

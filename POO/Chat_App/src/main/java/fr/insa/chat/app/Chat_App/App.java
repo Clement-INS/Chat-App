@@ -35,9 +35,10 @@ public class App extends Application {
     }
 
     @Override
+
     public void stop(){
         UDP_Controller.disconnexion(App.user);
-    	stage.close();
+    	  stage.close();
     }
    
     

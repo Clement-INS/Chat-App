@@ -105,7 +105,6 @@ class Receiving_thread extends Thread{
 						}
 						else if (state.equals("PSEUDO")) {
 							user.ActifUsers.put(id, pseudo);
-							this.add_connected(pseudo);
 						}
 						else {
 							throw new IllegalArgumentException("Wrong first word in UDP message !!!");
@@ -130,7 +129,7 @@ public class UDP_Controller{
 	private static UDP_Controller singleton;
 	protected Receiving_thread rt;
 
-	public static UDP_Controller getController() {
+	public static UDP_Controller getInstance() {
 		if (singleton == null) {
 			singleton = new UDP_Controller();
 		}

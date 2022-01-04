@@ -68,7 +68,7 @@ class ReceivingThreadServer extends Thread{
 			@Override
 			public void run() {
 				try {
-					ServerConversationThreadManager.controller.addMessageFrom(msg);
+					ServerConversationThreadManager.controller.addMessageFrom(MainController.currentDate(),msg);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -88,6 +88,7 @@ class ReceivingThreadServer extends Thread{
 				if (ServerConversationThreadManager.controller != null) {
 					if (App.user.ActifUsers.get(this.distant).equals(arr[0]) && ServerConversationThreadManager.controller.getPseudoCurrentDiscussion().equals(arr[0])) {
 						print_message(arr[1]);
+						DTBController.getInstance().add_message(this.distant, arr[1], 0, MainController.currentDate());
 					}
 				}
 				System.out.println("Client : "+received);

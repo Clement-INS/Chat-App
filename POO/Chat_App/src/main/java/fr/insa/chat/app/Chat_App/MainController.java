@@ -25,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 
 public class MainController {
 
@@ -36,7 +37,7 @@ public class MainController {
 	@FXML private TextField textMsgField;
 
 	@FXML private VBox connectedUserList;
-	
+
 	@FXML private ListView<String> inDiscussionWith;
 	
     @FXML private ScrollPane scrollMessage; 
@@ -60,10 +61,6 @@ public class MainController {
 			addConnected(pseudo);
 		}
 		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
-		
-		
-        addConnected("Trurue");
-        
 	}
 
 	/*
@@ -102,8 +99,8 @@ public class MainController {
 	/*
 	 * Invoke addMessage with the received message component 
 	 */
-	public void addMessageFrom(String content) throws IOException{
-		addMessage(currentDate(), content, "receivedMessage.fxml");
+	public void addMessageFrom(String date, String content) throws IOException{
+		addMessage(date, content, "receivedMessage.fxml");
 	}
 
 	/*
@@ -139,11 +136,10 @@ public class MainController {
 			String messageText = textMsgField.getText();
 			if (!messageText.isEmpty()){
 				if(App.currentDiscussionIndex >= 0){
-					String date = currentDate();
+					String date = MainController.currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
-					this.SendingThread.get(this.currentDiscussionPseudo).send(App.user.GetPseudo() + " " + messageText);
-					//this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
+					this.SendingThread.get(this.currentDiscussionPseudo).send(messageText);
 				}
 				else{
 					alert.show();
@@ -156,20 +152,20 @@ public class MainController {
 	 * Same as sendMessage but with the Send button
 	 */
 	@FXML
-    private void sendMessageButton() throws IOException {
-        String messageText = textMsgField.getText();
-        if (!messageText.isEmpty()){
-            if(App.currentDiscussionIndex >= 0){
-                String date = currentDate();
-                addMessageTo(date,messageText);
-                textMsgField.clear();
-            }
-            else{
-                alert.show();
-            }
-        }
-    }
-	
+	private void sendMessageButton() throws IOException {
+		String messageText = textMsgField.getText();
+		if (!messageText.isEmpty()){
+			if(App.currentDiscussionIndex >= 0){
+				String date = MainController.currentDate();
+				addMessageTo(date,messageText);
+				textMsgField.clear();
+			}
+			else{
+				alert.show();
+			}
+		}
+	}
+
 	/*private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
@@ -199,7 +195,7 @@ public class MainController {
 
 		messageLabel.setText(content);
 		connectedUserList.getChildren().add(pane);
-		
+
 	}
 
    /*
@@ -210,7 +206,6 @@ public class MainController {
 		AnchorPane pane;
 		int i = 0, j=0;
 		boolean removed = false;
-		
 		for (Node n : connectedUserList.getChildren()) {
 			pane = (AnchorPane) n;
 			Label name = (Label)pane.getChildren().get(0);
@@ -221,8 +216,7 @@ public class MainController {
 			}
 			i++;
 		}
-		
-		while (!removed) {	
+		while (!removed) {    
 			int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(j);
 			String name = getPseudoFromIndex(index);
 			if (name.equals(pseudo)) {
@@ -244,12 +238,7 @@ public class MainController {
 
 		String pseudo = messageLabel.getText();
 		inDiscussionWith.getItems().add(pseudo);
-		InetAddress dest = null;
-		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
-	        if (Objects.equals(pseudo, entry.getValue())) {
-	            dest = entry.getKey();
-	        }
-	    }
+		InetAddress dest = App.user.getAddressFromPseudo(pseudo);
 		if (dest == null) {
 			throw new NoSuchFieldError("No adress corresponding to this user");
 		}
@@ -275,6 +264,19 @@ public class MainController {
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
 			this.currentDiscussionPseudo = inDiscussionWith.getItems().get(App.currentDiscussionIndex);
 			resetMessage();
+			ArrayList <Message> msgList = DTBController.getInstance().getMessagesFromConv(App.user.getAddressFromPseudo(currentDiscussionPseudo));
+			for (Message p : msgList) {
+				try {
+					if (p.getFrom() == 1) {
+						addMessageTo(p.getDate(),p.getContent());
+					}
+					else {
+						addMessageFrom(p.getDate(),p.getContent());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		} 
 	}
 
@@ -294,7 +296,7 @@ public class MainController {
 
 				resetMessage();
 				App.currentDiscussionIndex = -1; 
-				updateCurrentDiscussion(); 
+				updateCurrentDiscussion();
 				this.currentDiscussionPseudo = "";
 			}
 		}

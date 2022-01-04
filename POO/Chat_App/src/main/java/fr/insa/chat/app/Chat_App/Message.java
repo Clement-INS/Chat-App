@@ -2,11 +2,11 @@
 
 public class Message {
 
-	public Boolean from;
-	public String date;
-	public String content;
+	private int from;
+	private String date;
+	private String content;
 
-	public Message(Boolean from, String date, String content){
+	public Message(int from, String date, String content){
 		this.from = from;
 		this.date = date;
 		this.content = content;
@@ -16,7 +16,7 @@ public class Message {
 		return content;
 	}
 
-	public Boolean getFrom() {
+	public int getFrom() {
 		return from;
 	}
 
