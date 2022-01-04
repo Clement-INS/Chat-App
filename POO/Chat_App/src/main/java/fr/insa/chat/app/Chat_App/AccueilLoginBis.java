@@ -15,7 +15,6 @@ public class AccueilLoginBis {
 		if(key.getCode() == KeyCode.ENTER) {
 			String pseudo = pseudoField.getText();
 			App.user.SetPseudo(pseudo);
-			App.reSize(1000, 800);
 	        App.setRoot("Main");
 		}
 	}

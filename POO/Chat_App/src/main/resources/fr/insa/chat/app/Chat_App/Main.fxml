@@ -116,7 +116,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <ListView fx:id="inDiscussionWith" onKeyReleased="#removeCurrentDiscussion" onMouseClicked="#updateCurrentDiscussion" prefHeight="540.0">
+                        <ListView fx:id="inDiscussionWith" onKeyReleased="#stopChatSessionWith" onMouseClicked="#updateCurrentDiscussion" prefHeight="540.0">
                            <VBox.margin>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="10.0" />
                            </VBox.margin>

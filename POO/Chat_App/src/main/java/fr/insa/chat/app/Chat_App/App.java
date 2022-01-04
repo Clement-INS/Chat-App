@@ -33,17 +33,14 @@ public class App extends Application {
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
-    
-    public static void reSize(double largeur, double hauteur) {
-    	stage.setWidth(largeur);
-    	stage.setHeight(hauteur);
-    	stage.centerOnScreen();
-    }
 
-    private void closeProgram() {
-    	UDP_Controller.disconnexion(App.user);
+    @Override
+    public void stop(){
+        System.out.println("Stage is closing");
+        UDP_Controller.disconnexion(App.user);
     	stage.close();
     }
+   
     
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));

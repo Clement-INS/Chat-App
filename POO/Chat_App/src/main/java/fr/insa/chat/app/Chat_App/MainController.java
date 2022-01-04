@@ -56,17 +56,11 @@ public class MainController {
 		}
 		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
 		
-		
-		ArrayList<Message> list = new ArrayList<Message>();
-		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
-		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-		//loadMessages(list);
 	}
 
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLoginBis");
-		App.reSize(1000, 800);
 	}
 
 	@FXML
@@ -154,6 +148,9 @@ public class MainController {
 		}
 	}*/
 
+   /*
+	*add a new user and his JavaFX components to the connected user list
+	*/
 	@FXML
 	public void addConnected(String content) throws IOException{
 		FXMLLoader loader = new FXMLLoader();   
@@ -167,24 +164,40 @@ public class MainController {
 		
 	}
 
+   /*
+	*remove a user and his JavaFX components from the connectedUserList
+	*/
 	@FXML
 	public void removeConnected(String pseudo){
 		AnchorPane pane;
-		int i = 0;
+		int i = 0, j=0;
+		boolean removed = false;
+		
 		for (Node n : connectedUserList.getChildren()) {
 			pane = (AnchorPane) n;
 			Label name = (Label)pane.getChildren().get(0);
 			if (name.getText().equals(pseudo)) {
 				connectedUserList.getChildren().remove(i);
+				removed = true;
 				break;
 			}
 			i++;
 		}
+		
+		while (!removed) {	
+			int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(j);
+			String name = getPseudoFromIndex(index);
+			if (name.equals(pseudo)) {
+				inDiscussionWith.getItems().remove(index);
+				removed = true;
+			}
+			j++;
+		}
 	}
 
-
 	/*
-	 * when click on active conversation  to talk to a user, start a connection to send messages.
+	 * when clicking on a user on connected user list, it adds this user to the active conversation list
+	 * and removes him from the connected user list
 	 */
 	private void startChatWith(AnchorPane pane){
 		Label messageLabel = (Label) pane.getChildren().get(0);
@@ -207,6 +220,9 @@ public class MainController {
 		}
 	}
 
+	/*
+	 * 
+	 */
 	private String getPseudoFromIndex(int index){
 		return inDiscussionWith.getItems().get(index).toString();
 	}
@@ -221,8 +237,12 @@ public class MainController {
 	}
 
 
+	/*
+	 * stop a chat session with a user and delete all the JavaFX component related to this chat
+	 * and add the user back to connected user list
+	 */
 	@FXML
-	private void removeCurrentDiscussion(KeyEvent key) throws IOException {
+	private void stopChatSessionWith(KeyEvent key) throws IOException {
 		if(key.getCode() == KeyCode.DELETE){
 			if (inDiscussionWith.getSelectionModel().getSelectedIndices().size() > 0){
 				int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);

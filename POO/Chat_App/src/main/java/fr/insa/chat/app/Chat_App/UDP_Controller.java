@@ -52,15 +52,6 @@ class Receiving_thread extends Thread{
 		});
 	}
 	
-	private void reSize(int a, int b) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				App.reSize(a,b);
-			}
-		});
-	}
-	
 	/**
 	 * Receive udp messages and acts according to the message
 	 */
@@ -122,7 +113,6 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					this.reSize(1000, 800);
 					App.setRoot("AccueilLoginBis");
 				}
 				else {

@@ -20,7 +20,6 @@ public class AccueilLoginController {
 			App.user = new UserModel(pseudo);
 			UDP_Controller.getController().start_receiving_thread(App.user);
 			ServerConversationThreadManager.acceptConversation();
-			App.reSize(1000, 800);
 			App.setRoot("Main");
 		}
 	}
