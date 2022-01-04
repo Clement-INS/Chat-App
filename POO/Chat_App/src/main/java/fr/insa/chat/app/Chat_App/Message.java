@@ -1,4 +1,4 @@
-/*package fr.insa.chat.app.Chat_App;
+package fr.insa.chat.app.Chat_App;
 
 public class Message {
 
@@ -25,4 +25,3 @@ public class Message {
 	}
 
 }
-*/

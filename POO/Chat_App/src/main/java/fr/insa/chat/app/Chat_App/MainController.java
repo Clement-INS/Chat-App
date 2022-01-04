@@ -54,7 +54,7 @@ public class MainController {
 	 */
 	@FXML
 	protected void initialize() throws IOException {
-		UDP_Controller.getController().rt.SetController(this);
+		UDP_Controller.getInstance().rt.SetController(this);
 		ServerConversationThreadManager.controller = this;
 		pseudoActuel.setText(App.user.GetPseudo());
 		for (String pseudo  : App.user.ActifUsers.values()) {
@@ -120,7 +120,7 @@ public class MainController {
 	/*
 	 * Return the current date at the good format
 	 */
-	public String currentDate(){
+	public static String currentDate(){
 		Date date = new Date();
 		SimpleDateFormat formater = new SimpleDateFormat("'Le' dd MMMM 'à' HH:mm");;
 		return formater.format(date);
