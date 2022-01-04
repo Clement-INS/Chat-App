@@ -41,32 +41,11 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>fr.insa.chat.app.Chat_App.Main</mainClass>
+                            <mainClass>fr.insa.chat.app.Chat_App.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>single</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <archive>
-                            <manifest>
-                                <mainClass>fr.insa.chat.app.Chat_App.Main</mainClass>
-                            </manifest>
-                        </archive>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                    </configuration>
-                </plugin>
         </plugins>
     </build>
 </project>
