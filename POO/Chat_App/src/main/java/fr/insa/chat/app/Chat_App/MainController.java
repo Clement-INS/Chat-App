@@ -266,7 +266,7 @@ public class MainController {
 	}
 
 	/*
-	 * When the user wants to chat with someone else it invokes this function that changes the user
+	 * When the user wants to chat with someone it invokes this function that changes the user
 	 * current chat to the other one he wants
 	 */
 	@FXML
