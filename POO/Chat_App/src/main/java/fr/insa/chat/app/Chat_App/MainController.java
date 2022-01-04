@@ -159,11 +159,12 @@ public class MainController {
 				String date = MainController.currentDate();
 				addMessageTo(date,messageText);
 				textMsgField.clear();
+				this.SendingThread.get(this.currentDiscussionPseudo).send(messageText);
 			}
 			else{
 				alert.show();
 			}
-		}
+		}  
 	}
 
 	/*private void loadMessages(ArrayList<Message> list) throws IOException{

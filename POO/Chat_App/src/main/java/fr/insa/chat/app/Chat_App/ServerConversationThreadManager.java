@@ -75,7 +75,7 @@ class ReceivingThreadServer extends Thread{
 			}
 		});
 	}
-	
+
 	/**
 	 * Receive messages from client and close sockets when the client is disconnected
 	 */
@@ -86,9 +86,11 @@ class ReceivingThreadServer extends Thread{
 			while(received!=null){
 				String arr[] = received.split(" ", 2);
 				if (ServerConversationThreadManager.controller != null) {
-					if (App.user.ActifUsers.get(this.distant).equals(arr[0]) && ServerConversationThreadManager.controller.getPseudoCurrentDiscussion().equals(arr[0])) {
-						print_message(arr[1]);
+					if (App.user.ActifUsers.get(this.distant).equals(arr[0])) {
 						DTBController.getInstance().add_message(this.distant, arr[1], 0, MainController.currentDate());
+						if (ServerConversationThreadManager.controller.getPseudoCurrentDiscussion().equals(arr[0])) {
+							print_message(arr[1]);
+						}
 					}
 				}
 				System.out.println("Client : "+received);
@@ -105,7 +107,7 @@ class ReceivingThreadServer extends Thread{
 
 
 public class ServerConversationThreadManager {
-	
+
 	public static MainController controller;
 
 	/**
