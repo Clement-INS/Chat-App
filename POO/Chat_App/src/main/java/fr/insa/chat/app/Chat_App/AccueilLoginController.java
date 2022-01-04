@@ -24,7 +24,12 @@ public class AccueilLoginController {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			App.setRoot("Main");
+			if (App.user.getValid()) {
+				App.setRoot("Main");
+			}
+			else {
+				App.setRoot("AccueilLoginBis");
+			}
 		}
 	}
 }

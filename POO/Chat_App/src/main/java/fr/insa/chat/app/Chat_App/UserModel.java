@@ -16,12 +16,15 @@ public class UserModel {
 	
 	private String Pseudo;
 	
+	private boolean valid_pseudo;
+	
 	private ArrayList <InetAddress> Ids;
 	
 	
 	protected HashMap<InetAddress, String> ActifUsers;
 	
 	public UserModel(String Pseudo) {
+		this.valid_pseudo = true;
 		this.Pseudo = Pseudo;
 		this.Ids = new ArrayList <InetAddress> ();
 		Enumeration<NetworkInterface> interfaces;
@@ -45,6 +48,14 @@ public class UserModel {
 	public void SetPseudo(String Pseudo) {
 		this.Pseudo = Pseudo;
 		UDP_Controller.change(this);
+	}
+	
+	public void setValid(boolean valid) {
+		this.valid_pseudo = valid;
+	}
+	
+	public boolean getValid() {
+		return this.valid_pseudo;
 	}
 	
 	public String GetPseudo() {

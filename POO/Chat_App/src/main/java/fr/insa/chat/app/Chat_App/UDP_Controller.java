@@ -112,7 +112,8 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					App.setRoot("AccueilLoginBis");
+					System.out.println("aaa");
+					App.user.setValid(false);
 				}
 				else {
 					throw new IllegalArgumentException("Wrong UDP size message !!!");
