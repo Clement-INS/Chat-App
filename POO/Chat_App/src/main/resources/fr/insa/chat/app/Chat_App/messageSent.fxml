@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="200.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefWidth="200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox AnchorPane.rightAnchor="0.0">
+      <VBox AnchorPane.rightAnchor="20.0">
          <children>
             <AnchorPane fx:id="messageFrom1" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
                <children>
