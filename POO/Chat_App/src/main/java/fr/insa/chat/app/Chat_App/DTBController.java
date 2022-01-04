@@ -35,7 +35,6 @@ public class DTBController{
 						+ "		date text\n"
 						+ ")";
 				stmt.executeUpdate(sql);
-				System.out.println("table created");
 			}
 			catch (SQLException e) {
 				e.printStackTrace();

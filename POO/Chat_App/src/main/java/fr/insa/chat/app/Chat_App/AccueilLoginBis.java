@@ -27,7 +27,6 @@ public class AccueilLoginBis {
 				App.setRoot("Main");
 			}
 			else {
-				System.out.println("no valid");
 				App.setRoot("AccueilLoginBis");
 			};
 		}

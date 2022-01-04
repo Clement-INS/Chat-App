@@ -89,10 +89,8 @@ class ReceivingThreadServer extends Thread{
 						}
 					}
 				}
-				System.out.println("Client : "+received);
 				received = in.readLine();
 			}
-			System.out.println("Client disconnected");
 			in.close();
 			convsocket.close();
 		} catch (IOException e) {

@@ -79,7 +79,23 @@ public class MainController {
 
 		AnchorPane pane1 = (AnchorPane) vbox.getChildren().get(0);
 		Label messageLabel = (Label) pane1.getChildren().get(0);
-		messageLabel.setText(content);
+		if (content.length()<38){
+			messageLabel.setText(content);
+		}else {
+			String newMessage ="";
+			int index = 37;
+			while (index < content.length()) {
+				while(content.charAt(index) != ' ') {
+					index++;
+				}
+				newMessage = newMessage.concat(content.substring(0, index));
+				newMessage+="\n ";
+				content = content.substring(index);
+				index = 37;
+			}
+			newMessage = newMessage.concat(content);
+			messageLabel.setText(newMessage);
+		}
 
 		AnchorPane pane2 = (AnchorPane) vbox.getChildren().get(1);
 		Label dateLabel = (Label) pane2.getChildren().get(0);
