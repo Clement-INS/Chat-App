@@ -64,7 +64,6 @@ class Receiving_thread extends Thread{
 			while(true) {
 				socket.receive(receivePacket);
 				String msg = new String (receivePacket.getData(), 0, receivePacket.getLength());
-				System.out.println("received : "+msg);
 				String[] infos = msg.split(" ");
 				if (infos.length == 2) {
 					String state = infos[0];
@@ -112,7 +111,6 @@ class Receiving_thread extends Thread{
 					}
 				}
 				else if (infos.length == 1 && infos[0].equals("ILLEGAL_PSEUDO")) {
-					System.out.println("aaa");
 					App.user.setValid(false);
 				}
 				else {
@@ -166,7 +164,6 @@ public class UDP_Controller{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("broadcast : "+msg);
 	}
 
 	/**
@@ -185,7 +182,6 @@ public class UDP_Controller{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("send : "+msg+" "+dest.getHostAddress());
 	}
 
 	/**
