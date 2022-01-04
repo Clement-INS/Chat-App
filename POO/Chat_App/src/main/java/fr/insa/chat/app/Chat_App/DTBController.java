@@ -1,15 +1,17 @@
 package fr.insa.chat.app.Chat_App;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import javafx.util.Pair;
+
 import java.net.InetAddress;
 import java.io.File;
-import java.io.IOException;
 
 public class DTBController{
 
@@ -29,11 +31,13 @@ public class DTBController{
 			try (Connection con = DriverManager.getConnection(DB_URL)){
 				Statement stmt = con.createStatement();
 				String sql = "CREATE TABLE IF NOT EXISTS messages (\n"
-						+ " msg text,\n"
-						+ " id text,\n"
-						+ " order integer\n"
-						+ ");";
+						+ "		msg text,\n"
+						+ " 	id text,\n"
+						+ "		isSend integer,\n"
+						+ "		date text\n"
+						+ ")";
 				stmt.executeUpdate(sql);
+				System.out.println("table created");
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -55,43 +59,43 @@ public class DTBController{
 		DB.delete();
 	}
 
-	protected void add_message(InetAddress id, String msg, Integer order) {
+	protected void add_message(InetAddress id, String msg, Integer isSend, String date) {
 		String str_id = id.getHostAddress();
 		try (Connection con = DriverManager.getConnection(DB_URL)){
-			String sql = "INSERT INTO messages(msg,id) VALUES(?,?,?)";
+			String sql = "INSERT INTO messages(msg,id,isSend,date) VALUES(?,?,?,?)";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, msg);
 			pstmt.setString(2, str_id);
-			pstmt.setInt(3, order);
+			pstmt.setInt(3, isSend);
+			pstmt.setString(4, date);
 			pstmt.executeUpdate();
-			App.msgNumber++;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	protected void getMessagesFromConv(InetAddress id) {
+	protected ArrayList <Message> getMessagesFromConv(InetAddress id) {
 		try (Connection con = DriverManager.getConnection(DB_URL)){
 			String str_id = id.getHostAddress();
 			Statement stmt = con.createStatement();
 			String sql = "SELECT\n"
 						+ "msg,\n"
-						+ "id,\n"
-						+ "order\n"
+						+ "isSend,\n"
+						+ "date\n"
 						+ "FROM messages\n"
-						+ "WHERE id = "+str_id+"\n"
-						+ "ORDER BY order ASC;";
+						+ "WHERE id = '"+str_id+"'\n";
 			ResultSet res =  stmt.executeQuery(sql);
+			ArrayList <Message> msgList = new ArrayList();
 			while(res.next()) {
-				System.out.print(res.getString(1)+" : ");
-				System.out.println(res.getString(2)+" : ");
-				System.out.println(res.getString(3)+";");
+				msgList.add(new Message(res.getInt(2), res.getString(3), res.getString(1)));
 			}
+			return msgList;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	protected void print_tables() {
@@ -101,8 +105,9 @@ public class DTBController{
 			ResultSet res =  stmt.executeQuery(sql);
 			while(res.next()) {
 				System.out.print(res.getString(1)+" : ");
-				System.out.println(res.getString(2)+" : ");
-				System.out.println(res.getString(3)+";");
+				System.out.print(res.getString(2)+" : ");
+				System.out.print(res.getInt(3)+" : ");
+				System.out.println(res.getInt(4)+";");
 			}
 		}
 		catch (SQLException e) {

@@ -25,8 +25,8 @@ public class ClientConversationThreadManager{
 	}
 
 	public void send(String msg) {
-		DTBController.getInstance().add_message(dest, msg, App.msgNumber);
-		out.println(msg);
+		DTBController.getInstance().add_message(dest, msg, 1, MainController.currentDate());
+		out.println(App.user.GetPseudo() + " " + msg);
 		out.flush();
 	}
 }

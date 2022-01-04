@@ -19,7 +19,6 @@ public class App extends Application {
     private static Scene scene;
     public static int currentDiscussionIndex = -1;
     protected static UserModel user;
-    public static int msgNumber = 0;
 
     @Override
     public void start(Stage stageIni) throws IOException {

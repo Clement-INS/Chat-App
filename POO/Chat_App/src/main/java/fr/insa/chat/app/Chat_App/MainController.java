@@ -24,6 +24,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 
 public class MainController {
 
@@ -81,8 +82,8 @@ public class MainController {
 		messageList.getChildren().add(pane);
 	}
 
-	public void addMessageFrom(String content) throws IOException{
-		addMessage(currentDate(), content, "receivedMessage.fxml");
+	public void addMessageFrom(String date, String content) throws IOException{
+		addMessage(date, content, "receivedMessage.fxml");
 	}
 
 	public void addMessageTo(String date, String content) throws IOException{
@@ -93,7 +94,7 @@ public class MainController {
 		messageList.getChildren().clear();
 	}
 
-	public String currentDate(){
+	public static String currentDate(){
 		Date date = new Date();
 		SimpleDateFormat formater = new SimpleDateFormat("'Le' dd MMMM 'à' HH:mm");;
 		return formater.format(date);
@@ -106,10 +107,10 @@ public class MainController {
 			String messageText = textMsgField.getText();
 			if (!messageText.isEmpty()){
 				if(App.currentDiscussionIndex >= 0){
-					String date = currentDate();
+					String date = MainController.currentDate();
 					addMessageTo(date,messageText);
 					textMsgField.clear();
-					this.SendingThread.get(this.currentDiscussionPseudo).send(App.user.GetPseudo() + " " + messageText);
+					this.SendingThread.get(this.currentDiscussionPseudo).send(messageText);
 					//this.SendingThread.send(App.user.GetPseudo() + " " + messageText);
 				}
 				else{
@@ -124,7 +125,7 @@ public class MainController {
 		String messageText = textMsgField.getText();
 		if (!messageText.isEmpty()){
 			if(App.currentDiscussionIndex >= 0){
-				String date = currentDate();
+				String date = MainController.currentDate();
 				addMessageTo(date,messageText);
 				textMsgField.clear();
 			}
@@ -201,12 +202,7 @@ public class MainController {
 
 		String pseudo = messageLabel.getText();
 		inDiscussionWith.getItems().add(pseudo);
-		InetAddress dest = null;
-		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
-			if (Objects.equals(pseudo, entry.getValue())) {
-				dest = entry.getKey();
-			}
-		}
+		InetAddress dest = App.user.getAddressFromPseudo(pseudo);
 		if (dest == null) {
 			throw new NoSuchFieldError("No adress corresponding to this user");
 		}
@@ -225,6 +221,19 @@ public class MainController {
 			App.currentDiscussionIndex = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(0);
 			this.currentDiscussionPseudo = inDiscussionWith.getItems().get(App.currentDiscussionIndex);
 			resetMessage();
+			ArrayList <Message> msgList = DTBController.getInstance().getMessagesFromConv(App.user.getAddressFromPseudo(currentDiscussionPseudo));
+			for (Message p : msgList) {
+				try {
+					if (p.getFrom() == 1) {
+						addMessageTo(p.getDate(),p.getContent());
+					}
+					else {
+						addMessageFrom(p.getDate(),p.getContent());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		} 
 	}
 
@@ -240,7 +249,7 @@ public class MainController {
 
 				resetMessage();
 				App.currentDiscussionIndex = -1; 
-				updateCurrentDiscussion(); 
+				updateCurrentDiscussion();
 				this.currentDiscussionPseudo = "";
 			}
 		}
