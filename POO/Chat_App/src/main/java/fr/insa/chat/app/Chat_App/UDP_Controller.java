@@ -52,7 +52,6 @@ class Receiving_thread extends Thread{
 		});
 	}
 	
-	
 	/**
 	 * Receive udp messages and acts according to the message
 	 */

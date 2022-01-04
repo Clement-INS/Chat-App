@@ -35,10 +35,12 @@ public class App extends Application {
     }
 
     @Override
-    public void stop() {
-    	UDP_Controller.disconnexion(App.user);
-    	stage.close();
+
+    public void stop(){
+        UDP_Controller.disconnexion(App.user);
+    	  stage.close();
     }
+   
     
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
