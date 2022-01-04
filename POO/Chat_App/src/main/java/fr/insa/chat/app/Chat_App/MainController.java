@@ -35,9 +35,9 @@ public class MainController {
 	@FXML private TextField textMsgField;
 
 	@FXML private VBox connectedUserList;
-	
+
 	@FXML private ListView<String> inDiscussionWith;
-	
+
 	private HashMap <String, ClientConversationThreadManager> SendingThread;
 	private String currentDiscussionPseudo = "";
 
@@ -47,26 +47,21 @@ public class MainController {
 
 	@FXML
 	protected void initialize() throws IOException {
-		
-		UDP_Controller.getController().rt.SetController(this);
+
+		UDP_Controller.getInstance().rt.SetController(this);
 		ServerConversationThreadManager.controller = this;
 		pseudoActuel.setText(App.user.GetPseudo());
 		for (String pseudo  : App.user.ActifUsers.values()) {
 			addConnected(pseudo);
 		}
 		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
-		
-		
-		ArrayList<Message> list = new ArrayList<Message>();
-		list.add(new Message(true,currentDate(),"ALORS LA ZONE"));
-		list.add(new Message(false,currentDate(),"CA DIT QUOI"));
-		//loadMessages(list);
+
+
 	}
 
 	@FXML
 	private void changePseudo() throws IOException {
 		App.setRoot("AccueilLoginBis");
-		App.reSize(1000, 800);
 	}
 
 	@FXML
@@ -125,20 +120,20 @@ public class MainController {
 	}
 
 	@FXML
-    private void sendMessageButton() throws IOException {
-        String messageText = textMsgField.getText();
-        if (!messageText.isEmpty()){
-            if(App.currentDiscussionIndex >= 0){
-                String date = currentDate();
-                addMessageTo(date,messageText);
-                textMsgField.clear();
-            }
-            else{
-                alert.show();
-            }
-        }
-    }
-	
+	private void sendMessageButton() throws IOException {
+		String messageText = textMsgField.getText();
+		if (!messageText.isEmpty()){
+			if(App.currentDiscussionIndex >= 0){
+				String date = currentDate();
+				addMessageTo(date,messageText);
+				textMsgField.clear();
+			}
+			else{
+				alert.show();
+			}
+		}
+	}
+
 	/*private void loadMessages(ArrayList<Message> list) throws IOException{
 		for(Message m : list){
 			Boolean from = m.getFrom();
@@ -164,21 +159,34 @@ public class MainController {
 
 		messageLabel.setText(content);
 		connectedUserList.getChildren().add(pane);
-		
+
 	}
 
 	@FXML
 	public void removeConnected(String pseudo){
 		AnchorPane pane;
-		int i = 0;
+		int i = 0, j=0;
+		boolean removed = false;
+
 		for (Node n : connectedUserList.getChildren()) {
 			pane = (AnchorPane) n;
 			Label name = (Label)pane.getChildren().get(0);
 			if (name.getText().equals(pseudo)) {
 				connectedUserList.getChildren().remove(i);
+				removed = true;
 				break;
 			}
 			i++;
+		}
+
+		while (!removed) {    
+			int index = (int)inDiscussionWith.getSelectionModel().getSelectedIndices().get(j);
+			String name = getPseudoFromIndex(index);
+			if (name.equals(pseudo)) {
+				inDiscussionWith.getItems().remove(index);
+				removed = true;
+			}
+			j++;
 		}
 	}
 
@@ -195,10 +203,10 @@ public class MainController {
 		inDiscussionWith.getItems().add(pseudo);
 		InetAddress dest = null;
 		for (Entry<InetAddress, String> entry : App.user.ActifUsers.entrySet()) {
-	        if (Objects.equals(pseudo, entry.getValue())) {
-	            dest = entry.getKey();
-	        }
-	    }
+			if (Objects.equals(pseudo, entry.getValue())) {
+				dest = entry.getKey();
+			}
+		}
 		if (dest == null) {
 			throw new NoSuchFieldError("No adress corresponding to this user");
 		}
@@ -237,7 +245,7 @@ public class MainController {
 			}
 		}
 	}
-	
+
 	public String getPseudoCurrentDiscussion() {
 		return this.currentDiscussionPseudo;
 	}

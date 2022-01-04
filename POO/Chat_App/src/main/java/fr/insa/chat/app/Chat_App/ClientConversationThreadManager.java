@@ -8,7 +8,7 @@ import java.net.Socket;
 public class ClientConversationThreadManager{
 
 	private PrintWriter out;
-
+	private InetAddress dest;
 	/**
 	 * Start a chat session with a server on port 1051 with dest address, start sending and receiving threads.
 	 * @param dest IP address of the server to chat with
@@ -16,6 +16,7 @@ public class ClientConversationThreadManager{
 	public ClientConversationThreadManager(InetAddress dest){
 		final Socket clientsock ;
 		try{
+			this.dest = dest;
 			clientsock = new Socket(dest, 1051);
 			this.out = new PrintWriter(clientsock.getOutputStream());
 		} catch(IOException e){
@@ -24,6 +25,7 @@ public class ClientConversationThreadManager{
 	}
 
 	public void send(String msg) {
+		DTBController.getInstance().add_message(dest, msg, App.msgNumber);
 		out.println(msg);
 		out.flush();
 	}

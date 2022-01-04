@@ -19,6 +19,7 @@ public class App extends Application {
     private static Scene scene;
     public static int currentDiscussionIndex = -1;
     protected static UserModel user;
+    public static int msgNumber = 0;
 
     @Override
     public void start(Stage stageIni) throws IOException {
@@ -33,14 +34,9 @@ public class App extends Application {
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
-    
-    public static void reSize(double largeur, double hauteur) {
-    	stage.setWidth(largeur);
-    	stage.setHeight(hauteur);
-    	stage.centerOnScreen();
-    }
 
-    private void closeProgram() {
+    @Override
+    public void stop() {
     	UDP_Controller.disconnexion(App.user);
     	stage.close();
     }
