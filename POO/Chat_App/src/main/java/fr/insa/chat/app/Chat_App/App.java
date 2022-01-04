@@ -36,9 +36,10 @@ public class App extends Application {
 
 	@Override
 
-	public void stop(){
+	public void stop() throws Exception{
 		UDP_Controller.disconnexion(App.user);
 		stage.close();
+		super.stop();
 	}
 
 

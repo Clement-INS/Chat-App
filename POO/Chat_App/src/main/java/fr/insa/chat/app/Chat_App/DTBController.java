@@ -18,7 +18,7 @@ public class DTBController{
 	private String DatabaseName;
 
 	private DTBController() {
-		String DatabaseName = "Databases/localmessages.db";
+		String DatabaseName = "localmessages.db";
 		this.DatabaseName = DatabaseName;
 		File DB = new File(DatabaseName);
 		try {
