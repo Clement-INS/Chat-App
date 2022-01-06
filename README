@@ -1,0 +1,11 @@
+Une fois que vous avez récupérer l'ensemble du projet depuis github,
+vous pouvez récupérer le fichier Chat_App-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+qui se situe dans Chat-App/POO/Chat_App/target.
+
+Depuis un terminal, depuis le dossier où vous avez mis le fichier .jar ou bien depuis Chat-App/POO/Chat_App/target
+si vous ne l'avez pas déplacé, pour lancer l'application, lancez la commande :
+
+	java -jar Chat_App-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+	
+Vous pouvez maintenant utiliser l'application en choisissant un pseudo et communiquer avec d'autres pc sur le même réseau local
+ayant l'application lancée.
