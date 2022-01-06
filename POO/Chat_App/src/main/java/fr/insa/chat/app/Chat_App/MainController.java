@@ -58,6 +58,13 @@ public class MainController {
 		}
 		this.SendingThread = new HashMap<String, ClientConversationThreadManager>();
 	}
+	
+	
+	@FXML
+	private void eraseDatabase(){
+		DTBController.getInstance().remove_DB();
+		resetMessage();
+	}
 
 	/*
 	 * When button change pseudo is clicked, the user is back to the lobby and can change his pseudo
@@ -305,5 +312,8 @@ public class MainController {
 	public String getPseudoCurrentDiscussion() {
 		return this.currentDiscussionPseudo;
 	}
+	
+
+	
 
 }

@@ -19,16 +19,21 @@ public class AccueilLoginController {
 			App.user = new UserModel(pseudo);
 			UDP_Controller.getInstance().start_receiving_thread(App.user);
 			ServerConversationThreadManager.acceptConversation();
-			try {
-				TimeUnit.MILLISECONDS.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (App.user.getValid()) {
-				App.setRoot("Main");
+			if (pseudo.split(" ").length != 1) {
+				App.setRoot("AccueilLoginBis");
 			}
 			else {
-				App.setRoot("AccueilLoginBis");
+				try {
+					TimeUnit.MILLISECONDS.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (App.user.getValid()) {
+					App.setRoot("Main");
+				}
+				else {
+					App.setRoot("AccueilLoginBis");
+				}
 			}
 		}
 	}

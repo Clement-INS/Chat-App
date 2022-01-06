@@ -40,7 +40,8 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="40.0" prefWidth="696.0">
                      <children>
-                        <Button fx:id="changePseudoButton" layoutX="555.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#changePseudo" style="-fx-background-color: lightgray;" text="Change Pseudo" />
+                        <Button fx:id="eraseDatabaseButton" layoutX="555.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#eraseDatabase" style="-fx-background-color: lightgray;" text="Erase historic" textFill="RED" />
+                        <Button fx:id="changePseudoButton1" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#changePseudo" style="-fx-background-color: lightgray;" text="Change Pseudo" />
                      </children>
                   </AnchorPane>
                </children>

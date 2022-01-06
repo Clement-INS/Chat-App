@@ -18,17 +18,22 @@ public class AccueilLoginBis {
 			App.user.setValid(true);
 			String pseudo = pseudoField.getText();
 			App.user.SetPseudo(pseudo);
-			try {
-				TimeUnit.MILLISECONDS.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (App.user.getValid()) {
-				App.setRoot("Main");
+			if (pseudo.split(" ").length != 1) {
+				App.setRoot("AccueilLoginBis");
 			}
 			else {
-				App.setRoot("AccueilLoginBis");
-			};
+				try {
+					TimeUnit.MILLISECONDS.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (App.user.getValid()) {
+					App.setRoot("Main");
+				}
+				else {
+					App.setRoot("AccueilLoginBis");
+				}
+			}
 		}
 	}
 }

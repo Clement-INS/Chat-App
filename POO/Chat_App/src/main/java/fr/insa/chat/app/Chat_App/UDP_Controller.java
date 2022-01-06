@@ -114,7 +114,7 @@ class Receiving_thread extends Thread{
 					App.user.setValid(false);
 				}
 				else {
-					throw new IllegalArgumentException("Wrong UDP size message !!!");
+					System.out.println("Wrong UDP size message !!!");
 				}
 			}
 		} catch (Exception e) {

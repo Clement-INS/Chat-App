@@ -54,6 +54,7 @@ public class DTBController{
 	protected void remove_DB() {
 		File DB = new File(DatabaseName);
 		DB.delete();
+		DTBController.singleton = null;
 	}
 
 	protected void add_message(InetAddress id, String msg, Integer isSend, String date) {

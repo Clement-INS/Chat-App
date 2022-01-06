@@ -1,9 +1,9 @@
-/home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/Main.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/MainController.java
+/home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/Main.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/ServerConversationThreadManager.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/DTBController.java
-/home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/ConnectedUserController.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/AccueilLoginBis.java
+/home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/ConnectedUserController.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/Message.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/messageSentController.java
 /home/clement/Documents/INSA/Chat-App/POO/Chat_App/src/main/java/fr/insa/chat/app/Chat_App/receivedMessageController.java
